@@ -1,0 +1,10 @@
+{
+  "pattern": "Classic",
+  "width": 20,
+  "top": 1000,
+  "bottom": 100,
+  "players": 3,
+  "regions": 7,
+  "age": 3,
+  "zoom": 20
+}
