@@ -1,11 +1,11 @@
-from feodal.tools import Tools
-import feodal.pathfinding
+from tools import Tools
+import pathfinding
 
 class Map:
     def __init__(self, package=None, generator=None):
         self.meta = {'Title': None}
         self.domains = []
-        self.generator = "Classic" if generator is None else (package.get("generator", "Classic") if package is not None else "Classic")
+        self.generator = generator if generator is None else (package['meta'].get("Generator", "Classic") if package is not None else "Classic")
         self.landscapes = {}
         self.nodes = []
         self.roads = []
@@ -21,6 +21,8 @@ class Map:
         self.top = packet['Top']
         self.bottom = packet['Bottom']
         self.sealev = packet['SeaLevel']
+        if 'Edition' in packet:
+            self.edition = packet['Edition']
 
     def unpack(self, packet):
         self.rehead(packet['meta'])
