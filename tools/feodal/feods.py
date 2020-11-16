@@ -5,14 +5,11 @@ import os
 import math
 #import MapTemplate as MT
 import datetime
-import importlib
-import sys
-if sys.hexversion < 0x030100F0:
-    import lands
-else:
-    from feodal import lands
+import time
 
-LAYERS = ['terrain', 'environments', 'landscape', 'buildings', 'castles', 'populations', 'domains', 'armies', 'control', 'marks']
+import lands
+
+LAYERS = ['terrain', 'environments', 'landscape', 'buildings', 'castles', 'populations', 'domains', 'armies', 'control', 'marks', 'commerce']
 
 
 maskBox = "{}/{}.worldbox"
@@ -54,6 +51,8 @@ def load(mapName, path='.', temp='.'):
     # Parse each layer (matrix of float values)
     for layer in LAYERS:
         packet['layers'][layer] = loadLayer(mapName, layer, path=temp)
+    # Add edition time
+    packet['meta']['Edition'] = time.ctime(os.path.getatime(dirPath))
     # Return a hash-table with full information
     return packet
 
@@ -143,7 +142,8 @@ def save(mapBox, fileName=None, path='.', temp='.', bg=False):
         os.mkdir(entityPath)
 
     print("Make storable files")
-    inform = zip(['landscape', 'domains', 'marks'], [mapBox.landscapes if len(mapBox.landscapes) > 0 else lands.lands, mapBox.domains, mapBox.marks])
+    scapes = {scape['ID']: scape for scape in mapBox.landscapes}
+    inform = zip(['landscape', 'domains', 'marks'], [scapes if len(scapes) > 0 else lands.lands, mapBox.domains, mapBox.marks])
 
     # Meta will store in root of archive.
     fname = maskJson.format(dirPath, 'meta')
@@ -156,7 +156,7 @@ def save(mapBox, fileName=None, path='.', temp='.', bg=False):
         with open(fname, "w+") as stock:
             json.dump(block, stock)
     # Layers will store in 'layers' sub-directory
-    for layerName, layer in mapBox.layers.iteritems() if sys.hexversion < 0x030100F0 else mapBox.layers.items():
+    for layerName, layer in mapBox.layers.iteritems():
         #print("... ... {}".format(layerName))
         saveLayer(layerName, layer, lineLength=mapBox.face, path=layersPath)
 
@@ -274,7 +274,7 @@ def loadAreal(mapName, arealID, path='.'):
     return [int(val) for val in serial]
 
 def chunks(array, face):
-    return [array[i:i+face] for i in range(0, len(array), face)]
+    return [array[i:i+face] for i in xrange(0, len(array), face)]
 
 if __name__ == '__main__':
     pass
