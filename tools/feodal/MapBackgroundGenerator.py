@@ -1,10 +1,6 @@
 import os
 import png
-import sys
-if sys.hexversion < 0x030100F0:
-    import pngs
-else:
-    from feodal import pngs
+from feodal import pngs
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter
 from scipy.ndimage.filters import median_filter
@@ -34,7 +30,7 @@ def colorize(image, pallette):
     return [[getColor(i, j) for i in range(0, face)] for j in range(0, face)]
 
 def grayscaling(layer, low, high):
-    scale = float(255 / abs(high - low))
+    scale = float(255 / abs(high - low if high > low else 1))
     return [int(val * scale) for val in layer]
 
 def packLayer(layer, side):
@@ -79,3 +75,4 @@ def toLine(data, side):
 
 if __name__ == '__main__':
     print('Hello?')
+    pass
