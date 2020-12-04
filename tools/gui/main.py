@@ -795,8 +795,8 @@ class DomainInfoWindow(dialogs.Dialog):
         positionDown = int(self.winfo_screenheight()/2 - 60)
 
         def isAvailableCell(no, owned=True):
-            region = mapBox.layers['domains'][i]
-            envir = mapBox.layers['environments'][i]
+            region = mapBox.layers['domains'][no]
+            envir = mapBox.layers['environments'][no]
             return ((owned and region == domain['id']) or (not owned and region == 0)) and (envir == Environments.Earth or envir == Environments.Port)
         def makeCellName(place):
             no = place[2]

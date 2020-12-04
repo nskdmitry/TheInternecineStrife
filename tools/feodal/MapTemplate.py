@@ -2,16 +2,16 @@ import os
 import sys
 import math
 import random
-import stats
 import operator
 import argparse
 import logging
 import numpy as np
 from collections import Counter
 
-from constants import Environments
-from lands import lands
+from feodal.constants import Environments
+from feodal.lands import lands
 import feodal.feods
+from feodal import stats
 
 class MapGenAreaType:
     TERRA=1 #

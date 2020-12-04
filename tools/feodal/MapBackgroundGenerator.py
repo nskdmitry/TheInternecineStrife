@@ -1,6 +1,6 @@
 import os
 import png
-import pngs
+from feodal import pngs
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter
 from scipy.ndimage.filters import median_filter

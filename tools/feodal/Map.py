@@ -1,5 +1,5 @@
-from tools import Tools
-import pathfinding
+from feodal.tools import Tools
+from feodal import pathfinding
 
 class Map:
     def __init__(self, package=None, generator=None):

@@ -7,7 +7,7 @@ import math
 import datetime
 import time
 
-import lands
+from feodal import lands
 
 LAYERS = ['terrain', 'environments', 'landscape', 'buildings', 'dwellings', 'castles', 'populations', 'domains', 'armies', 'control', 'marks', 'commerce']
 

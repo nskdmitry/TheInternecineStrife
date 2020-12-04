@@ -2,18 +2,18 @@ import os
 import sys
 import math
 import random
-import stats
 import operator
 import argparse
 import logging
 from collections import Counter
 from operator import itemgetter
 
-from lands import lands
-from constants import Environments, Age, Orientation
+from feodal import stats
+from feodal.lands import lands
+from feodal.constants import Environments, Age, Orientation
 import feodal.feods as feods
-import MapTemplate as MT
-from tools import Tools, loadJSON
+import feodal.MapTemplate as MT
+from feodal.tools import Tools, loadJSON
 
 import pdb
 
@@ -1939,7 +1939,7 @@ class PatternGenerator:
             regions[idDomain] = region
 
         def choiceCapital(cellIds):
-            cellIds.sort(cmp=lambda (a,b): capitolity[a] > capitolity[b])
+            cellIds.sort(cmp=lambda a,b: capitolity[a] > capitolity[b])
             choiced = self.rand.choice([self.rand.randint(0, len(cellIds) - 1) for _ in xrange(3)])
             return cellIds[choiced]
 

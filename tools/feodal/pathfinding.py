@@ -6,8 +6,8 @@ import os
 import math
 from collections import OrderedDict
 
-import lands
-from constants import Environments
+from feodal import lands
+from feodal.constants import Environments
 
 """
 Map (a.k.a. Terain) is Cell[]

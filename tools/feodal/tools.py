@@ -3,8 +3,8 @@ import os
 import json
 from random import Random
 
-from constants import Environments
-import MapBackgroundGenerator as mbg
+from feodal.constants import Environments
+import feodal.MapBackgroundGenerator as mbg
 
 ###
 ### Instruments.
