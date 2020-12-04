@@ -28,7 +28,7 @@ def frequency(collection):
     return freqs
 
 if __name__ == "__main__":
-    print("Test")
+    print "Test"
     three = [1, 2, 3]
     four = [1, 2, 3, 4]
     av1 = average(three)
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     d = 20
     c = 100
     collect = [int((i-k)*math.sin((i+k)*math.pi/d)*math.cos((k-i)*math.pi/d)) for i in range(1, c)]
-    print(collect)
+    print collect
     aver = average(collect)
     diameter = diam(collect)
     maxi = max(collect)

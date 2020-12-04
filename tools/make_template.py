@@ -30,6 +30,11 @@ sys.setdefaultencoding('utf8')
 tools = os.path.dirname(os.path.abspath(__file__))
 root = os.path.dirname(tools)
 
+try:
+    xrange
+except Exception:
+    xrange = range
+
 def console():
     parser = argparse.ArgumentParser()
     parser.add_argument('-n', '--name', help="Title of Patterm")
@@ -47,3 +52,4 @@ if __name__ == '__main__':
     world = World.Map(package)
     template = mt.MapTemplate(parser.name, world.landscapes)
     template.createFromMap(world)
+    

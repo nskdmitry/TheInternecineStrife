@@ -12,5 +12,5 @@ str_resources=[_("File name")
 , _("{}x{}"), _("Modify"), _("Pinc"), _("Mark"), _("Rect"), _("Composising a controllers..."), _("Draw a current map's layer..."), _("Map generation"), _("Map in saving"), _("Rasterization of layers...")
 , _("Save a map in file..."), _("Done"), _("Enter a name of new file/map. Map will rewrite if you close this window."), _("Map is modified. If you will close now, you lost all changes. Are you want save and rewrite map?"), _("Warning! Unsaved modifies."), _("File {} is not found (latest {})"), _("Main options of Map"), _("{} properties"), _("Name:"), _("Size:")
 , _("Player's not more than:"), _("Age by default:"), _("Heights diapazone:"), _("Top and Bottom cells count:"), _("Map generator (pattern):"), _("OK"), _("Cancel"), _("Neolit"), _("Bronze"), _("Iron")
-, _("Midieval"), _("Industrial"),
+, _("Midieval"), _("Industrial"), _("File opening time error"), _("Error: file {}.feods not found in defined folders."), _("Please wait: our generator make a new map at foreground process..."), _("New"), _("Rename mark"), _("Enter new name of mark (old: {})")
 ]

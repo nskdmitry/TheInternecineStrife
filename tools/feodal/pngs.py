@@ -42,9 +42,9 @@ def makeGrayPNG(data, height = None, width = None):
         png += I4(len(IHDR)) + block + I4(zlib.crc32(block))
     if makeIDAT:
         raw = b""
-        for y in range(0, height):
+        for y in xrange(height):
             raw += b"\0" # no filter for this scanline
-            for x in range(0, width):
+            for x in xrange(width):
                 c = b"\0" # default black pixel
                 if y < len(data) and x < len(data[y]):
                     c = I1(data[y][x])
@@ -87,9 +87,9 @@ def makeColorPNG(data, height = None, width = None, opacity = 0):
         png += I4(len(IHDR)) + block + I4(zlib.crc32(block))
     if makeIDAT:
         raw = b""
-        for y in range(0, height):
+        for y in xrange(height):
             raw += b"\0" # no filter for this scanline
-            for x in range(0, width):
+            for x in xrange(width):
                 c = b"\0" # default black pixel
                 if y < len(data) and x < len(data[y]):
                     color = data[y][x]
@@ -107,10 +107,10 @@ def makeColorPNG(data, height = None, width = None, opacity = 0):
     return png
 
 def prepareGrayscaleImageBuffer(face, ppc = 10):
-    return [[0 for j in range(0, face * ppc) ] for i in range(0, face * ppc) ]
+    return [[0 for j in xrange(face * ppc) ] for i in xrange(face * ppc) ]
 
 def prepareRGBImageBuffer(face, ppc = 10):
-    return [[(0, 0, 0) for j in range(0, face * ppc) ] for i in range(0, face * ppc) ]
+    return [[(0, 0, 0) for j in xrange(face * ppc) ] for i in xrange(face * ppc) ]
 
 def saveAsPNG(filename, rowsData, width, height, coder):
     width = width if width else len(rowsData[0])
@@ -170,4 +170,4 @@ def dimming(color, lightValue):
     brightest = max(color)
     propotions = [component/brightest for component in color]
     mist = lightValue / 255
-    return [int(mist*propotions[i]*color[i]) for i in range(0, 3)]
+    return [int(mist*propotions[i]*color[i]) for i in xrange(3)]

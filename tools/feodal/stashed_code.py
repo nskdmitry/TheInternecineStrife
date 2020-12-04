@@ -82,7 +82,7 @@ import operator
             idDomain = castles[capitals[nearestNo]]
             return idDomain
 
-        domains = [setDomain(i) for i in range(0, len(peasants))]
+        domains = [setDomain(i) for i in xrange(len(peasants))]
         return domains
 
 
@@ -116,10 +116,10 @@ import operator
     # Collect regios from more hobbitable cells to less hobbitable (resettlement)
     def genLandDevelopmentRegions(self, peasants):
         domainsList = [self.domain(0, -15, 0)]
-        domainsMap = [0 for i in range(0, self.size)]
+        domainsMap = [0 for i in xrange(self.size)]
 
         # Sort by descending a population
-        spreadingCenters = sorted([idCell for idCell in range(0, self.size)], key=lambda idCell: -peasants[idCell])
+        spreadingCenters = sorted([idCell for idCell in xrange(self.size)], key=lambda idCell: -peasants[idCell])
         for idCell in spreadingCenters:
             idDomain = domainsMap[idCell]
             # Create new region with center in current cell
@@ -151,7 +151,7 @@ import operator
             return
 
         # Sort by ascending a population
-        absorbing = sorted([idCell for idCell in range(0, self.size) if toAbsorb(idCell), key=lambda idCell: peasants[idCell])
+        absorbing = sorted([idCell for idCell in xrange(self.size) if toAbsorb(idCell), key=lambda idCell: peasants[idCell])
         willAbsorb = {idDomain: len([idCell for idCell in absorbing if domainsMap[idCell] == idDomain]) for idDomain in domainsList if not domainsList[idDomain] in greatCapitals}
 
         # Absorbation of "ownerless" cells:

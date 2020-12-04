@@ -16,6 +16,11 @@ def console():
     parser.add_argument('-s', '--save', default='HollowLand', help='Name of genered map file')
     return parser
 
+try:
+    xrange
+except Exception:
+    xrange = range
+
 if __name__ == '__main__':
     tools = os.path.dirname(__file__)
     root = os.path.dirname(tools)

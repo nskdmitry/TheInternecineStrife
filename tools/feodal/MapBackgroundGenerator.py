@@ -1,6 +1,6 @@
 import os
 import png
-from feodal import pngs
+import pngs
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter
 from scipy.ndimage.filters import median_filter
@@ -16,7 +16,7 @@ class InvalidIndex(IndexError):
 
 def getExtremusMap(heightsMap, face, ppc = 10):
     centerCells = getExtremumCenters(face, ppc)
-    centers = { {centerCells[i]: heightsMap[i]} for i in range(0, len(heightsMap))}
+    centers = { {centerCells[i]: heightsMap[i]} for i in xrange(len(heightsMap))}
     return centers
 
 def colorize(image, pallette):
@@ -27,7 +27,7 @@ def colorize(image, pallette):
             return (0, 0, 0)
             raise InvalidIndex("Index {} is outbounded".format(inx), inx, pallette)
         return pallette[ inx ]
-    return [[getColor(i, j) for i in range(0, face)] for j in range(0, face)]
+    return [[getColor(i, j) for i in xrange(face)] for j in xrange(face)]
 
 def grayscaling(layer, low, high):
     scale = float(255 / abs(high - low if high > low else 1))
@@ -66,6 +66,7 @@ def toLine(data, side):
     def lineze(row):
         immedited = []
         for pixel in row:
+            #print(pixel)
             immedited.append(pixel[0])
             immedited.append(pixel[1])
             immedited.append(pixel[2] if len(pixel) > 2 else 0)

@@ -6,15 +6,18 @@ import os
 import argparse
 import json
 
+tools = os.path.dirname(os.path.abspath(__file__))
+root = os.path.dirname(tools)
+
+new = os.path.join(root, "data", "basis", "new.feods")
+
 def console():
     parser = argparse.ArgumentParser(description="Map Editor of 'The Intenecine Strife' game (*.feods files)")
-    parser.add_argument("action", metavar="N", type=str, choices=["open", "new"], default="new", help="Action by start of edit")
+    parser.add_argument("action", metavar="A", type=str, choices=["open", "new"], default="new", help="Action by start of edit")
     parser.add_argument("-f", "--file", default=None, help="Name of feods usual placed file or path to custom-placed file. Name of new file else.")
 
     return parser.parse_args()
 
-tools = os.path.dirname(os.path.abspath(__file__))
-root = os.path.dirname(tools)
 def openMap(url):
     global root
     fileName = url
@@ -52,8 +55,6 @@ def create(name, config):
 
 if __name__ == "__main__":
     args = console()
-    if args.action == "new" and args.file == None:
-        args.file = "new"
 
     configProfile = os.path.join(tools, "data", "new.profile.json")
     with open(configProfile, 'r') as store:
@@ -63,10 +64,11 @@ if __name__ == "__main__":
     with open(pallettesAddr, 'r') as store:
         pallettes = json.load(store)
 
-    if args.file is not None:
-        gamebox = openMap(args.file) if args.action == "open" else create(args.file, config)
+    if args.file is None:
+        gamebox = openMap(new)
     else:
-        gamebox = None
+        gamebox = openMap(args.file) if args.action == "open" else create(args.file, config)
+        gamebox['meta']['Edition'] = main.time.ctime(main.time.time())
     complect = Map.Map(gamebox, generator=(config['pattern'] if args.action == "new" else (gamebox.get("generator", "Classic") if gamebox is not None else "Classic")))
     name = str(os.path.basename(args.file)).partition('.')[0] if (args.file is not None) else "new"
     main = main.MainWindow(complect, rootFolder=os.path.join(root, "data", "state", "maps.open", name), basic=root, pallettes=pallettes, to_open=args.file is None)

@@ -26,7 +26,7 @@ from feodal.tools import Tools, Picturization
 tools = os.path.dirname(os.path.abspath(__file__))
 root = os.path.dirname(tools)
 
-generators = {'Voolcano': typical.Voolcano, 'Classic': typical.Classic, 'Fantasy': typical.Fantasy, 'Colonies': typical.RandomicColonies}
+generators = {'Voolcano': typical.Voolcano, 'Classic': typical.Classic, 'Fantasy': typical.Fantasy, 'RandomicColonies': typical.RandomicColonies, "New": typical.New}
 available = ", ".join(generators.keys())
 
 def console():

@@ -1,9 +1,5 @@
-''' Set of map generator facades '''
-import math, sys
-if sys.hexversion < 0x030100F0:
-    import generators, tools, lands
-else:
-    from feodal import generators, tools, lands
+from feodal import generators, tools, lands
+import math
 
 class AbstractGeneratorFacade:
     """ Framework for constructs a generators. """
@@ -13,7 +9,7 @@ class AbstractGeneratorFacade:
         self.playerIDs = playerIDs
 
         self.landings = lands.lands
-        self.tools = tools.Tools(face, [self.landings[land] for land in self.landings.keys()])
+        self.tools = tools.Tools(face, [self.landings[land] for land in self.landings.iterkeys()])
         self.generator = None
         self.regions = regionsLimit
 
@@ -22,14 +18,16 @@ class AbstractGeneratorFacade:
 
     def setLandscapeAsset(self, asset):
         self.landings = asset
-        self.tools.scapes = [self.landings[land] for land in asset.keys()]
+        self.tools.scapes = [self.landings[land] for land in asset.iterkeys()]
         self.tools.scapes.sort(key=lambda landscape: landscape['ID'])
 
     def generate(self, name, debugFolder):
         self.generator.regionsCount = self.regions
         self.generator.debugFolder = debugFolder
         print("Save debug output files to", debugFolder)
-        return self.generator.new(name, self.tools.face, self.playerIDs, tools=self.tools)
+        package = self.generator.new(name, self.tools.face, self.playerIDs, tools=self.tools)
+        package['meta']['Generator'] = self.__class__.__name__
+        return package
 
 
 class SeparatesWithoutSea(AbstractGeneratorFacade):
@@ -40,7 +38,7 @@ class SeparatesWithoutSea(AbstractGeneratorFacade):
         super(AbstractGeneratorFacade, self).__init__(face, playerIDs, age)
 
         terrain = generators.SmoothTerrainGenerator(face, exterms=3, top=3000, bottom=100, sea=0)
-        lander = generators.SimpleLandGenerator(face, age)
+        lander = generators.SimpleLandGenerator(face, age, self.landings)
         capitaler = generators.SelfCapitalCell(face)
         dweller = generators.CommonSenseDwellinger(face, self.scapes, globalPopulation=10000)
         officier = generators.LordCourt(face, self.scapes)
@@ -64,7 +62,7 @@ class RandomicColonies(AbstractGeneratorFacade):
         wholePopulations = face * face * 10
 
         terrain = generators.SmoothTerrainGenerator(face, extrems=int(face/2), top=3000, bottom=-500, sea=0)
-        lander = generators.SimpleLandGenerator(face, age)
+        lander = generators.SimpleLandGenerator(face, age, self.landings)
         dweller = generators.EvolutionRandomHomo(face, wholePopulations)
         capitaler = generators.SearchGoodPlaceToCapital(face, age, playersIDs)
         officier = generators.LordCourt(face, self.scapes)
@@ -107,7 +105,7 @@ class Classic(AbstractGeneratorFacade):
         oikumenaPopulation = face*face*100
 
         terrain = generators.SmoothTerrainGenerator(face, extrems=int(face/2), top=5000, bottom=-1000, sea=0)
-        lander = generators.SimpleLandGenerator(face, age)
+        lander = generators.SimpleLandGenerator(face, self.landings)
         dweller = generators.CommonSenseDwellinger(face, globalPopulation=oikumenaPopulation)
         capitaler = generators.SearchGoodPlaceToCapital(face, age, playersIDs)
         officier = generators.LordCourt(face)
@@ -157,3 +155,39 @@ class Balanced(AbstractGeneratorFacade):
         culture = generators.FamilyCastles(face)
 
         self.generator = generators.MapGenerator(terrain, lander, capitaler, dweller, officier, explorer, historic, culture)
+
+class New(AbstractGeneratorFacade):
+    """ Empty uniformed map. """
+    def __init__(self, face, playerIDs, regionsLimit=0, age=generators.Age.Bronze):
+        AbstractGeneratorFacade.__init__(self, face, playerIDs, regionsLimit, age)
+        self.level = age
+    HEIGHT = 200
+    def tuneTerrain(self, top, bottom, seaLev):
+        pass
+    def generate(self, name, debugFolder):
+        package = {}
+        package['meta'] = {'Title': name, 'Face': self.tools.face, 'PlayersLimit': len(self.playerIDs)-1, 'SeaLevel': 0, 'Top': self.HEIGHT, 'Bottom': self.HEIGHT-1, 'Extrems': 0, 'Level': self.level}
+        package['meta']['WholePopulation'] = 0
+        package['meta']['Generator'] = "New"
+        package['domains'] = [self.tools.domain(0, -10)]
+        package['marks'] = ['']
+        package['roads'] = []
+        package['landscape'] = self.tools.scapes
+        zeros = generators.Void(self.tools.face, 0).generate(self.tools)
+        ones = generators.Void(self.tools.face, 1).generate(self.tools)
+        heighed = generators.Void(self.tools.face, self.HEIGHT).generate(self.tools)
+        heighed[0] = heighed[0] - 1
+        package['layers'] = {}
+        package['layers']['terrain'] = heighed
+        package['layers']['environments'] = ones
+        package['layers']['landscape'] = ones
+        package['layers']['dwellings'] = zeros
+        package['layers']['castles'] = zeros
+        package['layers']['populations'] = zeros
+        package['layers']['armies'] = zeros
+        package['layers']['domains'] = zeros
+        # Other layers
+        package['layers']['commerce'] = zeros
+        package['layers']['control'] = zeros
+        package['layers']['marks'] = zeros
+        return package

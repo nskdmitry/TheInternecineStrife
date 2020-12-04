@@ -2,21 +2,16 @@ import os
 import sys
 import math
 import random
+import stats
 import operator
 import argparse
 import logging
 import numpy as np
 from collections import Counter
-if sys.hexversion < 0x030100F0:
-    from constants import Environments
-    from lands import lands
-    import feodal.feods
-    import stats
-else:
-    from feodal.constants import Environments
-    from feodal.lands import lands
-    import feodal.feods as feods
-    import feodal.stats as stats
+
+from constants import Environments
+from lands import lands
+import feodal.feods
 
 class MapGenAreaType:
     TERRA=1 #
@@ -400,7 +395,7 @@ class MapByTemplate:
         self.layers = {}
         self.layers['terrain'] = heights
         self.layers['landscapes'] = landings
-        capitals = [-1 for i in range(0, self.face * self.face)]
+        capitals = [-1 for i in xrange(self.face * self.face)]
         for place, user in castles.iteritems():
             capitals[place] = user
         self.layers['castles'] = capitals

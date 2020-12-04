@@ -2,18 +2,18 @@ import os
 import sys
 import math
 import random
+import stats
 import operator
 import argparse
 import logging
 from collections import Counter
 from operator import itemgetter
 
-import feodal.stats
-from feodal.lands import lands
-from feodal.constants import Environments, Age, Orientation
+from lands import lands
+from constants import Environments, Age, Orientation
 import feodal.feods as feods
-import feodal.MapTemplate as MT
-from feodal.tools import Tools, loadJSON
+import MapTemplate as MT
+from tools import Tools, loadJSON
 
 import pdb
 
@@ -60,9 +60,9 @@ class LayerGenerator:
 
 class Void(LayerGenerator):
     """ Fill the layer with once value """
-    def init(self, face, fill=0):
+    def __init__(self, face, fill=0):
         LayerGenerator.__init__(self, face)
-        self.latest = [fill for i in self.size]
+        self.latest = [fill for i in range(0, self.size)]
     def generate(self, tools):
         return self.latest
 
@@ -369,8 +369,6 @@ class SimpleLandGenerator(LayerGenerator):
                 soil = landing
                 return soil['High'] - high > eps and high - soil['Low'] > eps and soil['Level'] <= self.level
             suitable = [landing['ID'] for landing in tools.scapes if selector(landing)]
-            about = "  Available for height={}: {}".format(high, ", ".join(["{} ({})".format(tools.scapes[scape]['Name'], scape) for scape in suitable]))
-            logging.debug(about)
             case = random.choice(suitable) if len(suitable) > 0 else 0
             return case
         self.latest = [highToLandscape(self, height) for height in self.dependences[0].latest]
@@ -1239,7 +1237,7 @@ class InfinityAbsorbation(LayerGenerator):
 
         # Create domains by left capitals
         newId = 1
-        replaces = {}
+        replaces = dict({})
         for capital in castles.keys():
             domains.append(tools.domain(newId, capital, newId if newId > len(self.players) else 0))
             replaces[capital] = newId
@@ -1248,7 +1246,7 @@ class InfinityAbsorbation(LayerGenerator):
             oldId = domainsMap[i]
             if not replaces.has_key(oldId):
                 oldId = domainsMap[domainsMap[oldId]]
-            newId = replaces[oldId]
+            newId = replaces.get(oldId, domainsMap[i])
             domainsMap[i] = newId
 
         self.domains = domains
@@ -1430,7 +1428,7 @@ class IntegrationRegions(LayerGenerator):
             newId = newId + 1
         for i in xrange(len(domainsMap)):
             oldId = domainsMap[i]
-            newId = replaces[oldId]
+            newId = replaces.get(oldId, oldId)
             domainsMap[i] = newId
         self.domains = fullplace
         self.latest = domainsMap
@@ -1449,7 +1447,8 @@ class NoBuildingsBefore(LayerGenerator):
         self.age = Age.Neolit
 
     def generate(self, tools):
-        return self.dependences[0].latest
+        self.latest = [0 for i in range(0, self.size)]
+        return self.latest
 
 class DwellyCaves(LayerGenerator):
     """
@@ -1461,6 +1460,7 @@ class DwellyCaves(LayerGenerator):
         self.age = Age.Neolit
 
     def generate(self, tools):
+        self.dwellings = []
         wild = self.dependences[0].latest
         population = self.dependences[1].latest
         armies = self.dependences[2].latest
@@ -1474,9 +1474,11 @@ class DwellyCaves(LayerGenerator):
             canWill = self.selectDwellingType(tools, dwellTypes, heights[idCell], tools.scapes[place])
             if len(canWill) == 0:
                 continue
-            buildings[idCell] = tools.rand.choice(canWill)
+            dwell = tools.dwelling(len(self.dwellings) + 1, tools.rand.choice(canWill))
+            self.dwellings.append(dwell)
+            buildings[idCell] = dwell['id']
 
-        self.latest = [buildings.get(i, wild[i]) for i in range(0, self.size)]
+        self.latest = [buildings.get(i, 0) for i in range(0, self.size)]
         return self.latest
 
     def selectDwellingType(self, tools, allDwellTypes, height, placeType, peasants = 0, warriors = 0):
@@ -1489,6 +1491,8 @@ class WarAndPease(DwellyCaves):
         self.age = age
 
     def selectDwellingType(self, tools, allDwellTypes, height, placeType, peasants = 0, warriors = 0):
+        if peasants == 0 and warriors == 0:
+            return placeType
         orient = [Orientation.Tax, Orientation.Food, Orientation.Source, Orientation.Progress] if peasants > warriors else [Orientation.Weapon, Orientation.Recruit]
         return [terraformation['ID'] for terraformation in allDwellTypes if tools.canBuildAt(terraformation, height, placeType, self.age) and terraformation['Orient'] in orient]
 
@@ -1503,6 +1507,8 @@ class DefenceOfBorders(LayerGenerator):
         heights = self.dependences[3].latest
         domains = self.dependences[4].latest
 
+        self.dwellings = []
+
         dwellTypes = [dwellsType for dwellsType in tools.scapes if tools.homeable(dwellsType['ID'], Age.Neolit)]
         buildings = {idCell: wild[idCell] for isCell in range(0, self.size) if population[idCell] > 0 or armies[idCell] > 0}
         for idCell in buildings:
@@ -1510,9 +1516,11 @@ class DefenceOfBorders(LayerGenerator):
             canWill = self.selectDwellingType(tools, dwellTypes, domains[idCell], aroundLands, heights[idCell], wild[idCell])
             if len(canWill) == 0:
                 continue
-            buildings[idCell] = tools.rand.choice(canWill)
+            dwell = tools.dwelling(len(self.dwellings) + 1, tools.rand.choice(canWill))
+            self.dwellings.append(dwell)
+            buildings[idCell] = dwell['id']
 
-        self.latest = [buildings.get(i, wild[i]) for i in range(0, self.size)]
+        self.latest = [buildings.get(i, 0) for i in range(0, self.size)]
         return self.latest
 
     def selectDwellingType(self, tools, allDwellTypes, ownersDomain, around, height, landscape):
@@ -1528,14 +1536,16 @@ class FamilyCastles(LayerGenerator):
     def generate(self, tools):
         capitals = self.dependences[5].latest
         landscape = self.dependences[0].latest
-        self.latest = [landscape[i] for i in range(0, self.size)]
+        self.latest = [0 for i in range(0, self.size)]
 
         dwells = [holder['ID'] for holder in tools.scapes if holder['Civilization'] and holder['Fortifiedness'] > 0.0]
         dwells.sort(key=lambda no: tools.scapes[no]['Capacity'])
         dwell = dwells[0]
 
         for cell in capitals:
-            self.latest[cell] = dwell
+            dwelling = tools.dwelling(len(self.dwellings) + 1, dwell)
+            self.dwellings.append(dwelling)
+            self.latest[cell] = dwelling['id']
         return self.latest
 
 # Layer 8: Roads and commerce
@@ -1627,6 +1637,40 @@ class BanditsAtBorderlands(LayerGenerator):
             if betrayal > loyality:
                 #print("Cell loyality {}, chance of betrayal {} is shotted.".format(loyality, betrayal))
                 self.latest[x] = changeLoyality(x)
+        return self.latest
+
+class ShadowOfCastle(LayerGenerator):
+    """ Then far from the owners capital and near for capital of enemy than less of loyality. """
+
+    def generate(self, tools):
+        """ Make a particulary of  """
+        lords = self.dependences[0].latest # Castles, capitals of players
+        forces = self.dependences[1].latest # Armies soldier count
+        domains = self.dependences[2].latest # Map of domains
+        if len(domains) == 0:
+            domains = self.dependences[2].dependences[0].latest
+        self.latest = [domains[x] for x in range(0, self.size)]
+        capitals = {idCell: idDomain for idDomain, idCell in lords.iteritems()}
+        runInDistance = int(math.ceil(math.sqrt(self.face)))
+
+        def calcLoyality(idCell):
+            noDomain = domains[idCell]
+            if noDomain == 0:
+                return 0
+            center = capitals.get(noDomain, self.size * 2 + 1)
+            if center == idCell:
+                return 1.0
+            d = tools.dd(idCell, center)
+            return tools.influenceOf(1.0, 0, d, runInDistance) if d > runInDistance else 1.0
+
+        castles = capitals.keys()
+        for x in range(0, self.size):
+            shadowCaster, d = tools.getNearestCenter(x, castles)
+            loyality = calcLoyality(x)
+            shadowDarkness = tools.influenceOf(1.0, 0, d, runInDistance) if d > 0 else 1.1
+            betrayal = tools.rand.random()
+            if shadow > loyality or betrayal > loyality:
+                self.latest[x] = capitals[shadowCaster] if shadow > betrayal - 0.0001 else 0
         return self.latest
 
 # Layer 12: Marks on the map
@@ -1895,7 +1939,7 @@ class PatternGenerator:
             regions[idDomain] = region
 
         def choiceCapital(cellIds):
-            cellIds.sort(cmp=lambda a,b: capitolity[a] > capitolity[b])
+            cellIds.sort(cmp=lambda (a,b): capitolity[a] > capitolity[b])
             choiced = self.rand.choice([self.rand.randint(0, len(cellIds) - 1) for _ in xrange(3)])
             return cellIds[choiced]
 
@@ -2012,10 +2056,11 @@ class MapGenerator:
         package['domains'] = self.domains
         package['marks'] = self.toponames.marks
         package['landscape'] = tools.scapes
+        package['dwellings'] = self.culture.dwellings
         package['layers']['terrain'] = self.terrainer.latest
         package['layers']['environments'] = [tools.scapes[scapeNo]['Environment'] for scapeNo in self.lander.latest]
         package['layers']['landscape'] = self.lander.latest
-        package['layers']['buildings'] = self.culture.latest
+        package['layers']['dwellings'] = self.culture.latest
         capitals = [-1 for i in xrange(self.size)]
         for place, user in self.capitaler.latest.iteritems():
             capitals[place] = user

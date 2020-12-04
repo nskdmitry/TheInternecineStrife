@@ -6,13 +6,8 @@ import os
 import math
 from collections import OrderedDict
 
-import sys
-if sys.hexversion < 0x030100F0:
-    import lands
-    from constants import Environments
-else:
-    from feodal import lands
-    from feodal.constants import Environments
+import lands
+from constants import Environments
 
 """
 Map (a.k.a. Terain) is Cell[]

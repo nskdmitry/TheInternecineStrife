@@ -21,7 +21,7 @@ else:
     import gui.dialogs as dialogs
     import gui.resources as res
 from feodal import feods, constants, tools, Map
-from feodal.constants import Age
+from feodal.constants import Age, Environments
 from struct import pack
 import threading
 import new_map
@@ -54,6 +54,9 @@ class MainWindow(tk.Tk):
         splash = dialogs.Splash(caption=res.str_resources[21], comment=res.str_resources[22], parent=self)
         self.root_folder = rootFolder
         self.root_path = rootFolder if basic is None else basic
+        # "New" map constanted path
+        self.clear = os.path.join(self.root_path, "data", "basis")
+        self.cache = os.path.dirname(self.root_folder)
 
         splash.message.set(res.str_resources[20])
         self.name = mapBox.meta['Title']
@@ -65,10 +68,12 @@ class MainWindow(tk.Tk):
             elif to_open is None:
                 raise Exception(res.str_resources[2])
         # Window
-        original = os.path.join(self.root_path, "data", "assets", "maps", self.name + ".feods")
-        if not os.path.exists(original):
-            original = os.path.join(self.root_path, "data", "assets", "maps", "random", self.name + ".feods")
-        self.edition = time.ctime(os.path.getmtime(original))
+        self.edition = mapBox.meta.get('Edition', None)
+        if self.edition is None:
+            original = os.path.join(self.root_path, "data", "assets", "maps", self.name + ".feods")
+            if not os.path.exists(original):
+                original = os.path.join(self.root_path, "data", "assets", "maps", "random", self.name + ".feods")
+            self.edition = time.ctime(os.path.getmtime(original))
         self.title(res.str_resources[3].format(self.name, self.edition))
         # Gets the requested values of the height and widht.
         windowWidth = (self.VISUAL_FACE + 12)*self.ZOOM
@@ -90,13 +95,20 @@ class MainWindow(tk.Tk):
             raise
         self.modify = False
         splash.progress['value'] += 5
-        time.sleep(1)
+        splash.progress.update()
+
+        # Events
+        self.bind("<KeyRelease>", self.keyDown)
 
         # Edit options
         splash.message.set(res.str_resources[23])
         self.layer = self.layers.index("domains")
         self.curr_pallette = pallettes.get("domains", [])
         self.curr_layer = self.source.layers["domains"]
+        # Cache: capitals map and political pallette
+        self.politte = pallettes.get("castles", pallettes.get("domains", []))
+        self.capitals = self.source.layers['castles']
+        #
         self.showAs = tk.IntVar(value=self.SHOW_MODE_IMAGE)
         self.tool = tk.IntVar(value=self.USE_TOOL_GET)
         self.setValue = tk.IntVar(value=self.source.layers["domains"][0])
@@ -104,6 +116,8 @@ class MainWindow(tk.Tk):
         self.curr = (0, 0)
         self.currentCell = 0
         self.selection = set({})
+        if len(self.source.domains) == 0:
+            self.source.domains.append(self.toolkit.domain(0, -5))
         splash.progress['value'] += 5
         splash.progress.update()
 
@@ -113,6 +127,7 @@ class MainWindow(tk.Tk):
         self.config(menu=self.menu)
         file_menu = tk.Menu(self.menu)
         # [File]
+        file_menu.add_command(label=res.str_resources[66], command=lambda: self.new(None))
         file_menu.add_command(label=res.str_resources[4], underline=4, command=lambda: self.regen(None))
         file_menu.add_command(label=res.str_resources[5], underline=0, command=lambda: self.openMap(None))
         file_menu.add_separator()
@@ -205,24 +220,78 @@ class MainWindow(tk.Tk):
         splash.progress['value'] += 10
         splash.progress.update()
 
-        self.world.focus_set()
         splash.message.set(res.str_resources[37])
-        splash.progress['value'] = 85
-        self.showImage()
-        ## finished loading so destroy splash
-        time.sleep(2)
         splash.progress['value'] = 100
         splash.progress.update()
+        self.showImage()
         splash.destroy()
         self.deiconify()
+        self.after(1, lambda: self.focus_force())
+        self.limita["landscape"] = (0, len(feods.lands.lands)-1)
+        self.limita['marks'] = (0, len(self.source.marks)-1)
         self.mainloop()
 
     # Commands and events
+    def new(self, event):
+        mess = res.str_resources[44]
+        if self.modify:
+            userChoise = messagebox.askyesnocancel(title=res.str_resources[45], message=mess, default=messagebox.YES)
+            if userChoise: # YES
+                self.save(event)
+            elif userChoise is None: # CANCEL
+                return
+        # Options of new map.
+        config = MetaWindow(meta={}, isNew=True, parent=self)
+        self.wait_window(config)
+        props = config.meta
+        self.source.rehead(props)
+        #
+        name = self.source.name
+        w = self.source.face
+        t = self.source.top
+        b = self.source.bottom
+        p = self.source.meta['PlayersLimit']
+        a = self.source.meta['Level']
+        r = 0
+        pattern = "New"
+        z = self.ZOOM
+        waitForm = dialogs.Splash(caption=res.str_resources[28], comment=res.str_resources[65], parent=self)
+        exe = os.path.join(self.root_path, 'tools', 'new_map.py')
+        command = "python {0} -n={1} -f={2} -s={3} -t={4} -b={5} -p={6} -l={7} -r={8} -c={9} -z={10}".format(exe, name, name, w, t, b, p, a, r, pattern, z)
+        print(command)
+        output = os.system(command)
+        print(output)
+        print("")
+        waitForm.progress['value'] = 50
+        waitForm.title(res.str_resources[20])
+        waitForm.message.set(res.str_resources[21])
+        # Load from file
+        tmp = os.path.join(self.root_path, "data", "state", "maps.open", name)
+        fileName = os.path.join(self.root_path, 'data', 'assets', 'maps', "random")
+        if not os.path.exists(os.path.join(fileName, name + ".feods")):
+            waitForm.destroy()
+            self.deiconify()
+            messagebox.showerror(title=res.str_resources[20], message=res.str_resources[64].format(name))
+            return
+        mapBox = feods.load(name, path=fileName, temp=tmp)
+        # Reset window controllers
+        mapBox['meta']['Title'] = name
+        self.reset(mapBox, pattern=pattern, edition=time.ctime(time.time()))
+        waitForm.destroy()
+        self.deiconify()
+        #os.system("python {0}".format(os.path.join(self.root_path, "tools", "clearCache.py")))
     def regen(self, event):
         # Generate a new map with old parameters and reopen
-        name = tkSimpleDialog.askstring(title=res.str_resources[0], prompt=res.str_resources[1])
+        mess = res.str_resources[44]
+        userChoise = messagebox.askyesnocancel(title=res.str_resources[45], message=mess, default=messagebox.YES)
+        if userChoise: # YES
+            self.save(None)
+        elif userChoise is None: # CANCEL
+            return
+        # How we name a new map?
+        name = simpledialog.askstring(title=res.str_resources[0], prompt=res.str_resources[1])
         if name is None:
-            messagebox.showerror(title=res.str_resources[38], message=res.str_resources[2])
+            messagebox.showerror(title=res.str_resources[28], message=res.str_resources[2])
             return
         w = self.source.face
         t = self.source.top
@@ -230,39 +299,58 @@ class MainWindow(tk.Tk):
         p = self.source.meta['PlayersLimit']
         a = self.source.meta['Level']
         r = len(self.source.domains)
-        pattern = self.source.generator
+        if event is None:
+            pattern = self.source.meta.get('Generator', 'Classic')
+        else:
+            pattern = event
+        if type(pattern) == type(0):
+            pattern = "Classic"
         z = self.ZOOM
-        output = os.system("python {0}/new_map.py -n={1} -f={2} -s={3} -t={4} -b={5} -p={6} -l={7} -r={8} -c={9} -z={10}".format(tools, name, name, w, t, b, p, a, r, pattern, z))
+        waitForm = dialogs.Splash(caption=res.str_resources[28], comment=res.str_resources[65], parent=self)
+        exe = os.path.join(self.root_path, 'tools', 'new_map.py')
+        command = "python {0} -n={1} -f={2} -s={3} -t={4} -b={5} -p={6} -l={7} -r={8} -c={9} -z={10}".format(exe, name, name, w, t, b, p, a, r, pattern, z)
+        print(command)
+        output = os.system(command)
         print(output)
         print("")
+        waitForm.progress['value'] = 50
+        waitForm.title(res.str_resources[20])
+        waitForm.message.set(res.str_resources[21])
         # Load from file
-        tmp = os.path.join(root, "data", "state", "maps.open", name)
-        fileName = os.path.join(root, 'data', 'assets', 'maps', "random")
+        tmp = os.path.join(self.root_path, "data", "state", "maps.open", name)
+        fileName = os.path.join(self.root_path, 'data', 'assets', 'maps', "random")
+        if not os.path.exists(os.path.join(fileName, name + ".feods")):
+            waitForm.destroy()
+            self.deiconify()
+            messagebox.showerror(title=res.str_resources[20], message=res.str_resources[64].format(name))
+            return
         mapBox = feods.load(name, path=fileName, temp=tmp)
         # Reset window controllers
-        self.name = name
-        self.title(res.str_resources[3].format(self.name))
-        self.source = Map.Map(mapBox, generator=pattern)
-        self.layers = self.source.domains.keys()
-        self.layer = self.layers.index("domains")
-        self.setValue.set(self.source.layers["domains"][self.currentCell])
-        self.spinnable.set(str(self.source.layers["domains"][self.currentCell]))
-        self.domainsList.config(values=self.layers)
-        self.domainsList.current(self.layer)
-        self.valuer.config(to=len(self.source.domains), variable=self.setValue)
-        self.valueControl.config(to=len(self.source.domains), variable=self.spinnable)
-        # Update a map field
-        if self.showAs.get() == self.SHOW_MODE_IMAGE:
-            self.showImage()
-        else:
-            self.showValues()
+        mapBox['meta']['Title'] = name
+        self.reset(mapBox, pattern=pattern, edition=time.ctime(time.time()))
+        waitForm.destroy()
+        self.deiconify()
     def openMap(self, event):
-        pass
+        name = filedialog.askopenfilename(parent=self, title=res.str_resources[21], initialdir=os.path.join(self.root_path, "data", "assets", "maps"), filetypes=[("The Internecine Strife Map files", "*.feods")])
+        if name is None:
+            return
+        try:
+            if not os.path.exists(name):
+                messagebox.showerror(title="Not exists", message="{} is not found".format(name))
+                raise Exception()
+            mapBox = self.loadMap(str(name))
+        except:
+            messagebox.showerror(title=res.str_resources[63], message=res.str_resources[64].format(name))
+            return
+        # Reset window controllers
+        self.reset(mapBox, pattern=mapBox['meta'].get('Generator', None), edition=mapBox['meta']['Edition'])
     def save(self, event):
+        self.source.name = self.name
+        self.source.meta['Title'] = self.name
         splash = dialogs.Splash(res.str_resources[39], res.str_resources[40], self)
         path = os.path.join(self.root_path, "data", "assets", "maps")
         artist = tools.Picturization(self.source, self.pallettes)
-        artist.imagination(self.name, self.ZOOM, self.root_folder)
+        artist.imagination(self.name, self.ZOOM, os.path.dirname(self.root_folder))
         beStop = False
         splash.progress["value"] = 10
         splash.progress.update()
@@ -278,6 +366,7 @@ class MainWindow(tk.Tk):
         awaiter.start()
         try:
             splash.message.set(res.str_resources[41])
+            self.source.landscapes = [self.source.landscapes[scape] for scape in self.source.landscapes] if type(self.source.landscapes) == type(dict(a=1)) else self.source.landscapes
             feods.save(self.source, self.name, path=path, temp=os.path.dirname(self.root_folder))
         finally:
             splash.message.set(res.str_resources[42])
@@ -297,7 +386,6 @@ class MainWindow(tk.Tk):
         self.mapName.config(text=res.str_resources[30].format(self.name))
         self.save(event)
     def exit(self, event):
-        # TODO MessageBox with "Are you real close now?". User case.
         if self.modify:
             mess = res.str_resources[44]
             userChoise = messagebox.askyesnocancel(title=res.str_resources[45], message=mess, default=messagebox.YES)
@@ -322,15 +410,13 @@ class MainWindow(tk.Tk):
             self.layer = self.domainsList.current()
             layerName = self.layers[self.layer]
             if layerName == "populations":
-                self.dia = (bottom, top) = self.getLimits(self.currentCell)
-                self.valuer.config(from_=bottom, to=top)
-                self.spinnable.config(from_=bootom, to=top)
+                self.rescale()
         elif tool == self.USE_TOOL_PEN:
             val = self.valuer.get()
             x, y = (i * self.ZOOM, j * self.ZOOM)
             if val != self.curr_layer[self.currentCell]:
                 self.curr_layer[self.currentCell] = val
-                self.pen(x, y, val, mode=self.showAs.get())
+                self.pen(x, y, val, mode=self.showAs.get(), capital=self.capitals[self.currentCell])
         elif tool == self.USE_TOOL_SELECT:
             if self.currentCell in self.selection:
                 self.selection.remove(self.currentCell)
@@ -338,6 +424,19 @@ class MainWindow(tk.Tk):
                 self.selection.add(self.currentCell)
             val = self.toolkit.average([self.curr_layer[i] for i in self.selection])
             self.valuer.set(value)
+    def keyDown(self, event):
+        if event.keysym == 'Left' and self.frame[0] > 0:
+            self.frame = (self.frame[0] - 1, self.frame[1])
+        elif event.keysym == 'Right' and self.frame[0] < self.source.face - self.VISUAL_FACE:
+            self.frame = (self.frame[0] + 1, self.frame[1])
+        elif event.keysym == 'Up' and self.frame[1] > 0:
+            self.frame = (self.frame[0], self.frame[1] - 1)
+        elif event.keysym == 'Down' and self.frame[1] < self.source.face - self.VISUAL_FACE:
+            self.frame = (self.frame[0], self.frame[1] + 1)
+        if self.showAs.get() == self.SHOW_MODE_IMAGE:
+            self.showImage()
+        else:
+            self.showValues()
     def updMode(self, event):
         layer = self.layers[self.layer]
         self.curr_pallette = self.pallettes.get(layer, None)
@@ -360,8 +459,7 @@ class MainWindow(tk.Tk):
         layerName = self.layers[self.layer]
         self.curr_layer = self.source.layers[layerName]
         self.curr_pallette = self.pallettes.get(layerName, None)
-        self.dia = (bottom, top) = self.getLimits(self.currentCell)
-        self.valuer.config(from_=bottom, to=top)
+        self.rescale()
         # TODO Save a changes in files?
         if self.showAs.get() == self.SHOW_MODE_IMAGE:
             self.showImage()
@@ -388,6 +486,7 @@ class MainWindow(tk.Tk):
         x = self.curr[0]*self.ZOOM
         y = self.curr[1]*self.ZOOM
         self.pen(x, y, val, mode=self.showAs.get())
+    #
     def showMeta(self, new=None):
         meta = self.source.meta if not new or new is None else {}
         config = MetaWindow(meta=meta, isNew=False, parent=self)
@@ -395,23 +494,34 @@ class MainWindow(tk.Tk):
         self.source.rehead(config.meta)
         # Update window
         self.name = self.source.name
-        self.title(res.str_resources[3].format(self.name))
+        #self.edition = time.ctime(time.time())
+        self.title(res.str_resources[3].format(self.name, self.edition))
         self.mapName.config(text=res.str_resources[30].format(self.name))
         self.mapName.update()
         self.sizes.config(text=res.str_resources[31].format(self.source.face, self.source.face))
         self.sizes.update()
         self.update()
-    #
     def showDomains(self, event=None):
         variants = EntityListWindow(parent=self, instance=self.source, entityClass="domains", entityConstructor=lambda id_, name: self.toolkit.domain(id_, 0))
         self.wait_window(variants)
         toModify = variants.selected
-        print("Selected domain:", toModify)
-        # TODO: show domain edit window
+        variants.destroy()
+        self.deiconify()
+        #
+        informPanel = DomainInfoWindow(self.source, domain=toModify, parent=self)
+        self.wait_window(informPanel)
+        # ?
+        informPanel.destroy()
+        self.deiconify()
     def showHierarchy(self, event=None):
         pass
     def showMarks(self, event=None):
-        pass
+        marks = EntityListWindow(parent=self, instance=self.source, entityClass="marks", entityConstructor=lambda id_, name: name)
+        self.wait_window(marks)
+        if marks.selected is not None:
+            newName = simpledialog.askstring(title=res.str_resources[67], prompt=res.str_resources[68].format(marks.selected))
+            self.source.marks[-1] = newName
+        self.limita["marks"] = (0, len(self.source.marks)-1)
     # Tools
     limita = {"environments": (constants.Environments.Air, constants.Environments.Port), "terrain": (-1000, 5000), "populations": (0, 10000)}
     def getLimits(self, noCell):
@@ -425,13 +535,20 @@ class MainWindow(tk.Tk):
             landing = lands[noCell]
             environment = [self.source.landscapes[landscape] for landscape in self.source.landscapes if self.source.landscapes[landscape]['ID'] == landing][0]
             return (limits[0], environment['Capacity'])
+        if layerName == "marks":
+            return (0, len(self.source.marks) - 1)
         return limits
-    def pen(self, x, y, val, mode):
+    def pen(self, x, y, val, mode, capital = 0):
+        print("({}, {}) is capital of {} domain".format(x // self.ZOOM, y // self.ZOOM, capital) if capital > 0 else "({}, {}) is not capital".format(x // self.ZOOM, y // self.ZOOM))
         pallette = self.curr_pallette
         if mode == self.SHOW_MODE_IMAGE:
-            if pallette is not None and val >= len(pallette): val = len(pallette) - 1
+            if pallette is not None and val >= len(pallette): val = - 1
             color = pallette[val] if pallette is not None else self.grayscale(val)
             self.world.create_rectangle(x, y, x + self.ZOOM, y + self.ZOOM, fill=rgb(color))
+            if capital > 0:
+                if capital >= len(self.politte): capital = -1
+                color = self.politte[val]
+                self.world.create_oval(x+1, y+1, x+self.ZOOM-1, y+self.ZOOM-1, fill=rgb(color))
         else:
             sh = self.ZOOM//2
             self.world.create_rectangle(x, y, x + self.ZOOM, y + self.ZOOM, fill="white", outline="white")
@@ -442,9 +559,6 @@ class MainWindow(tk.Tk):
     # Graphic
     def showImage(self):
         """ Draw graphic view of cells """
-        # Mark a capital cell attributes
-        capitals = self.source.layers['castles']
-        politte = self.pallettes['castles']
         #
         for y in range(0, self.source.face):
             for x in range(0, self.source.face):
@@ -457,13 +571,16 @@ class MainWindow(tk.Tk):
                     color = self.grayscale(val)
                 self.world.create_rectangle(x*self.ZOOM, y*self.ZOOM, (x + 1)*self.ZOOM, (y + 1)* self.ZOOM, fill=rgb(color))
                 # Draw a capital mark
-                if capitals[i] > 0:
-                    val = capitals[i]
-                    if val >= len(politte): val = len(politte) - 1
-                    color = politte[val]
+                if self.capitals[i] > 0:
+                    val = self.capitals[i]
+                    if val >= len(self.politte): val = - 1
+                    color = self.politte[val]
                     self.world.create_oval(x*self.ZOOM+1, y*self.ZOOM+1, (x + 1)*self.ZOOM-1, (y + 1)*self.ZOOM-1, fill=rgb(color))
     def grayscale(self, value):
-        value = int((value - self.dia[0]) * (255.0 / self.dia[1]))
+        if self.dia[1] != 0 and self.dia[0] != 0:
+            value = int((value - self.dia[0]) * (255.0 / (self.dia[1] - self.dia[0])))
+        else:
+            value = 0
         if value < 0:
             value = 0
         elif value > 255:
@@ -481,17 +598,55 @@ class MainWindow(tk.Tk):
                 self.world.create_text(x*self.ZOOM + sh, y*self.ZOOM + sh, text=str(val))
     # Other
     def loadMap(self, url):
-        fileName = url
-        if not os.path.exists(fileName):
-            fileName = os.path.join(self.root_path, 'data', 'assets', 'maps', url + ".feods")
-            if not os.path.exists(fileName):
-                fileName = os.path.join(self.root_path, 'data', 'assets', 'maps', "random", url + ".feods")
-        if not os.path.exists(fileName):
-            raise Exception(res.str_resources[46].format(url, fileName))
-
-        name = str(os.path.basename(fileName)).partition('.')[0]
-        tmp = os.path.join(self.root_path, "data", "state", "maps.open")
-        return feods.load(name, os.path.dirname(fileName), temp=tmp)
+        url = url.replace('.feods', '')
+        print("Path: " + url)
+        paths = [url, os.path.join(self.root_path, 'data', 'assets', 'maps', url), os.path.join(self.root_path, 'data', 'assets', 'maps', "random", url)]
+        for fileName in paths:
+            if os.path.exists(fileName + ".feods"):
+                name = str(os.path.basename(fileName))
+                tmp = os.path.join(self.root_path, "data", "state", "maps.open")
+                print("File {}.feods has name {} and open to {}".format(fileName, name, tmp))
+                return feods.load(name, os.path.dirname(fileName), temp=tmp)
+            else:
+                print("Not found {}.feods".format(fileName))
+        raise Exception(res.str_resources[46].format(url, fileName))
+    def reset(self, mapBox, pattern=None, edition=None):
+        # Update a windows by a new map contains
+        self.name = mapBox['meta']['Title']
+        self.edition = edition if edition is not None else mapBox['meta'].get('Edition', time.ctime(time.time()))
+        self.title(res.str_resources[3].format(self.name, self.edition))
+        # Clear map field
+        self.world.create_rectangle(0, 0, self.source.face * self.ZOOM, self.source.face * self.ZOOM, fill="white")
+        # Update with new values
+        self.source = Map.Map(mapBox, generator=pattern)
+        self.layers = self.source.layers.keys()
+        self.layer = self.layers.index("domains")
+        self.setValue.set(self.source.layers["domains"][self.currentCell])
+        self.spinnable.set(str(self.source.layers["domains"][self.currentCell]))
+        self.domainsList.config(values=self.layers)
+        self.domainsList.current(self.layer)
+        self.valuer.config(to=len(self.source.domains), variable=self.setValue)
+        self.valueControl.config(to=len(self.source.domains), textvariable=self.spinnable)
+        self.curr_layer = self.source.layers[self.layers[self.layer]]
+        self.mapName.config(text=res.str_resources[30].format(self.name))
+        self.mapName.update()
+        self.sizes.config(text=res.str_resources[31].format(self.source.face, self.source.face))
+        self.sizes.update()
+        self.update()
+        # Update prepared vars
+        self.politte = self.pallettes.get("castles", self.pallettes.get("domains", []))
+        self.capitals = self.source.layers['castles']
+        self.frame = (0, 0)
+        # Update a map field
+        if self.showAs.get() == self.SHOW_MODE_IMAGE:
+            self.showImage()
+        else:
+            self.showValues()
+    def rescale(self):
+        self.dia = (bottom, top) = self.getLimits(self.currentCell)
+        self.valuer.config(from_=bottom, to=top)
+        self.valueControl.config(from_=bottom, to=top)
+        self.spinnable.set(self.source.layers[self.layers[self.layer]][self.currentCell])
 
 class MetaWindow(tk.Toplevel):
     """ Show and modify a map options. """
@@ -510,11 +665,13 @@ class MetaWindow(tk.Toplevel):
         self.orientiers = tk.StringVar(value=str(meta.get('Extrems', meta.get('Face', 5) - 1)))
         self.population = tk.StringVar(value=str(meta.get('WholePopulation', 1000)))
         generators = new_map.generators.keys()
-        actual = meta.get('Generator', 'Classic')
+        actual = meta.get('Generator', 'New')
         self.generator = tk.IntVar(value=generators.index(actual))
         editable = "normal" if isNew else "disabled"
+        self.meta['Generator'] = self.meta.get('Generator', 'New')
+        self.meta['SeaLevel'] = self.meta.get('SeaLevel', 0)
         # Make a form
-        self.title(res.str_resources[48].format(meta['Title']))
+        self.title(res.str_resources[48].format(meta.get('Title', '')))
         positionRight = int(self.winfo_screenwidth()/2 - 200)
         positionDown = int(self.winfo_screenheight()/2 - 150)
         self.geometry("400x300+{}+{}".format(positionRight, positionDown))
@@ -593,9 +750,14 @@ class EntityListWindow(dialogs.Dialog):
         self.options = tk.Listbox(self, width=16, bg="black", fg="white", height=20, xscrollcommand=scrollerX.set, yscrollcommand=scrollerY.set)
         index = 0
         strtype = type("")
+        unistr = type(u'')
         for item in self.items:
-            name = item.get('name', entityClass) if type(item) is not strtype else item
-            no = index + 1 if type(item) is strtype else item.get("id", item.get('ID', index + 1))
+            if type(item) is strtype or type(item) is unistr:
+                name = item
+                no = index
+            else:
+                name = item.get('name', entityClass)
+                no = item.get("id", item.get('ID', index + 1))
             self.options.insert(index, "{}. {}".format(no, name))
             index += 1
         # Buttons
@@ -621,3 +783,74 @@ class EntityListWindow(dialogs.Dialog):
     def cancel(self):
         self.selected = None
         self.exit()
+
+class DomainInfoWindow(dialogs.Dialog):
+    def __init__(self, mapBox, domain={}, parent=None):
+        dialogs.Dialog.__init__(self, parent if parent is not None else tk.Tk())
+        self.info = domain
+        self.landscapes = [mapBox.landscapes[item] for item in mapBox.landscapes] if type(mapBox.landscapes) == type({'a': 1}) else mapBox.landscapes
+        sorted(self.landscapes, key=lambda item: item['ID'])
+        face = mapBox.face
+        positionRight = int(self.winfo_screenwidth()/2 - 225)
+        positionDown = int(self.winfo_screenheight()/2 - 60)
+
+        def isAvailableCell(no, owned=True):
+            region = mapBox.layers['domains'][i]
+            envir = mapBox.layers['environments'][i]
+            return ((owned and region == domain['id']) or (not owned and region == 0)) and (envir == Environments.Earth or envir == Environments.Port)
+        def makeCellName(place):
+            no = place[2]
+            return "[{}, {}] ({} man)".format(place[0], place[1], mapBox.layers['populations'][no])
+
+        self.title("Domain {} show and edit".format(domain.get('name', 'New')))
+        self.geometry("450x120+{}+{}".format(positionRight, positionDown))
+        domaindedCells = [i for i in range(0, face*face) if isAvailableCell(i)]
+        if len(domaindedCells) == 0:
+            self.availableCapitals = [(i % face, i // face, i) for i in range(0, face*face) if isAvailableCell(i, False)]
+        else:
+            self.availableCapitals = [(i % face, i // face, i) for i in domaindedCells]
+        self.availableLords = ["(Free land)"] + ["Lord No" + str(i) for i in range(1, mapBox.meta['PlayersLimit']+1)]
+        self.cells = {place[2]: makeCellName(place) for place in self.availableCapitals}
+
+        self.ID = tk.StringVar(value=str(domain.get('id', 1)))
+        self.Name = tk.StringVar(value=domain.get('name', 'Domain #{}'.format(domain.get('id', 1))))
+        self.Capital = tk.IntVar(value=domain.get('capital', self.availableCapitals[0]))
+
+        tk.Label(self, textvariable=self.ID).grid(column=0, row=0)
+        tk.Entry(self, textvariable=self.Name).grid(column=1, row=0)
+        tk.Label(self, text="Owner lord").grid(column=0, row=1)
+        self.lordsList = ttk.Combobox(self, values=self.availableLords)
+        currLord = domain.get('owner', -1)
+        if currLord > -1:
+            self.lordsList.current(currLord)
+        self.lordsList.grid(column=1, row=1)
+        tk.Label(self, text="Capital cell").grid(column=0, row=2)
+        self.capitalsList = ttk.Combobox(self, values=self.cells.values())
+        self.capitalsList.bind("<<ComboboxSelected>>", lambda ev: self.setCapital(ev))
+        currCapital = domain.get('capital', -1)
+        if currCapital > -1 and currCapital in self.cells:
+            self.capitalsList.current(currCapital)
+        self.capitalsList.grid(column=1, row=2)
+        tk.Button(self, text="Accept", command=self.accept).grid(column=2, row=3)
+        tk.Button(self, text="Cancel", command=self.cancel).grid(column=3, row=3)
+
+        if parent is None:
+            self.master.mainloop()
+        self.master.update()
+
+    def setCapital(self, ev):
+        no = self.capitalsList.current()
+        self.Capital.set(no)
+    def accept(self):
+        self.saveConfiguration()
+        self.exit()
+    def cancel(self):
+        self.exit()
+
+    def saveConfiguration(self):
+        self.info['id'] = int(self.ID.get())
+        self.info['name'] = self.Name.get()
+        noCapital = self.Capital.get()
+        self.info['capital'] = self.cells.keys()[noCapital]
+        self.info['owner'] = self.lordsList.current()
+        return self.info

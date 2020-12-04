@@ -10,6 +10,7 @@ class Map:
         self.nodes = []
         self.roads = []
         self.layers = []
+        self.dwells = []
         if package != None:
             self.unpack(package)
 
@@ -30,6 +31,11 @@ class Map:
         self.layers = packet['layers']
         self.domains = packet['domains']
         self.marks = packet['marks']
+        try:
+            self.dwellings = packet.get('buildings', packet.get('dwellings', []))
+        except:
+            print(packet.keys())
+            raise
 
         heights = self.layers['terrain']
         landscape = self.layers['landscape']

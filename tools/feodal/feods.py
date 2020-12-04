@@ -9,7 +9,7 @@ import time
 
 import lands
 
-LAYERS = ['terrain', 'environments', 'landscape', 'buildings', 'castles', 'populations', 'domains', 'armies', 'control', 'marks', 'commerce']
+LAYERS = ['terrain', 'environments', 'landscape', 'buildings', 'dwellings', 'castles', 'populations', 'domains', 'armies', 'control', 'marks', 'commerce']
 
 
 maskBox = "{}/{}.worldbox"
@@ -17,25 +17,26 @@ maskMap = "{}/{}.feods"
 maskJson = "{}/{}.json"
 maskLayer = "{}/{}.layer"
 
-#TODO: Debug
 def load(mapName, path='.', temp='.'):
     """
     Load a Feudal World Engine (The Internecine Strife Game) map from *.feods file (layered map)
     """
 
     global LAYERS
-    global maskMap
     global maskJson
     global maskLayer
 
     packet = {'layers': {}}
 
     # Full name of path to map archive file
-    dirPath = os.path.join(path, mapName + '.feods')
+    map_name = mapName.replace('.feods', '')
+    print("{} is set. {} is find".format(mapName, map_name))
+    dirPath = os.path.join(path, map_name + '.feods')
     if not os.path.dirname(dirPath):
         os.mkdir(dirPath)
     # Extract all files to temporary folder
     directory = '.'
+    print(dirPath + " open")
     with tarfile.open(dirPath, 'r:gz') as arch:
         directory = temp# os.path.join(temp, mapName)
         arch.extractall(directory)
@@ -44,13 +45,20 @@ def load(mapName, path='.', temp='.'):
     fname = maskJson.format(os.path.join(temp, mapName), 'meta')
     with open(fname, 'r') as source:
         packet['meta'] = json.load(source)
-    for info in ['landscape', 'domains', 'marks']:
+    for info in ['landscape', 'domains', 'marks', 'dwellings']:
         fname = maskJson.format(os.path.join(temp, mapName, 'entities'), info)
+        if not os.path.exists(fname):
+            continue
         with open(fname, 'r') as source:
             packet[info] = json.load(source)
     # Parse each layer (matrix of float values)
     for layer in LAYERS:
-        packet['layers'][layer] = loadLayer(mapName, layer, path=temp)
+        block = loadLayer(mapName, layer, path=temp)
+        if block is None:
+            continue
+        packet['layers'][layer] = block
+    if 'dwellings' not in packet['layers']:
+        packet['layers']['dwellings'] = packet['layers']['buildings']
     # Add edition time
     packet['meta']['Edition'] = time.ctime(os.path.getatime(dirPath))
     # Return a hash-table with full information
@@ -143,7 +151,7 @@ def save(mapBox, fileName=None, path='.', temp='.', bg=False):
 
     print("Make storable files")
     scapes = {scape['ID']: scape for scape in mapBox.landscapes}
-    inform = zip(['landscape', 'domains', 'marks'], [scapes if len(scapes) > 0 else lands.lands, mapBox.domains, mapBox.marks])
+    inform = zip(['landscape', 'domains', 'marks', 'dwellings'], [scapes if len(scapes) > 0 else lands.lands, mapBox.domains, mapBox.marks, mapBox.dwellings])
 
     # Meta will store in root of archive.
     fname = maskJson.format(dirPath, 'meta')
@@ -257,7 +265,10 @@ def saveLayer(layerName, layer, lineLength=None, path='.'):
 
 def loadLayer(mapName, layerName, path='.'):
     global maskLayer
-    with open(maskLayer.format(os.path.join(path, mapName, 'layers'), layerName), "r") as block:
+    path = maskLayer.format(os.path.join(path, mapName, 'layers'), layerName)
+    if not os.path.exists(path):
+        return None
+    with open(path, "r") as block:
         serial = "".join(block.readlines())
         block.close()
     return [float(val) if round(float(val),0) != float(val) else int(val) for val in serial.split(',')]

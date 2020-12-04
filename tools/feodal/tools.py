@@ -2,14 +2,9 @@ import math
 import os
 import json
 from random import Random
-from functools import reduce
 
-import sys
-if sys.hexversion < 0x030100F0:
-    from constants import Environments
-else:
-    from feodal.constants import Environments
-    import feodal.MapBackgroundGenerator as mbg
+from constants import Environments
+import MapBackgroundGenerator as mbg
 
 ###
 ### Instruments.
@@ -19,7 +14,6 @@ class Tools:
     def __init__(self, face, scapes):
         self.face = face
         self.size = face * face
-        print("Landscape: ", scapes[0])
         scapes.sort(key=lambda landscape: landscape['ID'])
         self.scapes = scapes
         self.rand = Random()
@@ -93,14 +87,14 @@ class Tools:
 
     def smoothSlope(self, idCell, high, extrimes, k = 1.1):
         distance = self.dd
-        if hasKey(extrimes, idCell):
+        if extrimes.has_key(idCell):
             return extrimes[idCell]
-        influences = [self.calcKoolonInfluence(q1=math.sqrt(high), q2=extrimes[i], d=distance(idCell, i), koeff=k) for i in extrimes.keys()]
+        influences = [self.calcKoolonInfluence(q1=math.sqrt(high), q2=extrimes[i], d=distance(idCell, i), koeff=k) for i in extrimes.iterkeys()]
         upd = self.average(influences)
         return high + upd[0]
 
     def highApproxy(self, idCell, height, extrimes):
-        distances = {i: self.dd(idCell, i) for i in extrimes.keys()}
+        distances = {i: self.dd(idCell, i) for i in extrimes.iterkeys()}
         ranges = distances.items()
         on = ranges.index(min(ranges))
         influencer = distances.keys()[on]
@@ -109,6 +103,11 @@ class Tools:
     def influenceOf(self, currentHeight, extremumHeight, distance, longOfArms=None):
         longOfArms = abs(longOfArms if longOfArms is not None else self.face)
         return (currentHeight * (longOfArms - distance) + extremumHeight * distance) / longOfArms
+
+    def getNearestCenter(self, idCell, centers):
+        distances = [self.dd(idCenter, idCell) for idCenter in centers]
+        distance = min(distances)
+        return (centers[ distances.index(distance) ], distance)
 
     # Approximation of heights methods
     def calcKoolonInfluence(self, q1, q2, d, koeff = 1.1):
@@ -122,6 +121,9 @@ class Tools:
 
     def domain(self, no, capitalID, ownerID=0):
         return {'id': no, 'name': "Domain #{}".format(no), 'capital': capitalID, 'owner': ownerID}
+
+    def dwelling(self, no, subtype):
+        return {'id': no, 'name': 'village', 'class': subtype, 'walls': {'height': 2, 'perimeter': 800, 'material': 1.0}} # Material - wood, side of wall = 200m, height = 2m
 
     # Conditional method for landscape's filter
 
@@ -220,11 +222,12 @@ class Picturization:
             image = mbg._zoom(layer, self.face, pixelPerCell)
             saveGray(image, layerName)
 
-
-        for layerName, pallette in self.pallettes.iteritems() if sys.hexversion < 0x030100F0 else self.pallettes.items():
+        for layerName, pallette in self.pallettes.iteritems():
             fname = pngMask.format(dirPath, layerName)
             #print("... ... Save {0} image".format(fname))
             try:
+                if layerName not in layers:
+                    continue
                 layer = layers[layerName]
                 image = mbg.colorize(mbg.packLayer(mbg._zoom(layer, self.face, pixelPerCell), side), pallette)
             except mbg.InvalidIndex as e:
@@ -277,6 +280,3 @@ class AreaAgregation:
 def loadJSON(path):
     with open(path, "r") as source:
         return json.load(source)
-
-def hasKey(self, key):
-    return (sys.hexversion < 0x030100F0 and self.has_key(key)) or key in self
