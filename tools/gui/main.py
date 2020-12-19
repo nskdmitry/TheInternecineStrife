@@ -2,11 +2,13 @@
 Main Window of MapEdit.
 """
 
-#import pygame
 import os
 import platform
 import time
 import sys
+from struct import pack
+import threading
+from feodal import feods, constants, tools, Map
 if sys.hexversion < 0x030100F0:
     import Tkinter as tk
     import ttk
@@ -15,15 +17,13 @@ if sys.hexversion < 0x030100F0:
     import tkSimpleDialog as simpledialog
     import dialogs
     import resources as res
+    from feodal.constants import Age, Environments
 else:
     import tkinter as tk
     from tkinter import ttk, messagebox, filedialog, simpledialog
     import gui.dialogs as dialogs
     import gui.resources as res
-from feodal import feods, constants, tools, Map
-from feodal.constants import Age, Environments
-from struct import pack
-import threading
+    from feodal.constants import Age, Environments
 import new_map
 
 if sys.hexversion < 0x030100F0:
@@ -138,7 +138,7 @@ class MainWindow(tk.Tk):
         self.menu.add_cascade(label=res.str_resources[9], menu=file_menu, underline=0)
         # [Visual]
         visual_menu = tk.Menu(self.menu)
-        visual_menu.add_radiobutton(label=res.str_resources[10], var=self.showAs, value=self.SHOW_MODE_IMAGE, command=lambda: self.updMode(None))
+        visual_menu.add_radiobutton(label=res.str_resources[69], var=self.showAs, value=self.SHOW_MODE_IMAGE, command=lambda: self.updMode(None))
         visual_menu.add_radiobutton(label=res.str_resources[11], var=self.showAs, value=self.SHOW_MODE_VALUES, command=lambda: self.updMode(None))
         self.menu.add_cascade(label=res.str_resources[10], menu=visual_menu, underline=0)
         # [Tools]
@@ -186,6 +186,7 @@ class MainWindow(tk.Tk):
         # Value of cell
         self.valuer = tk.Scale(master=self, from_=0, to=len(mapBox.domains)-1, resolution=1, variable=self.setValue, tickinterval=4, command=self.updValue, orient=tk.HORIZONTAL)
         self.valueControl = tk.Spinbox(master=self, from_=0, to=len(mapBox.domains)-1, increment=1, width=5, textvariable=self.spinnable, command=lambda: self.updValue(self.valueControl.get()))
+        addValueButton = tk.Button(master=self, text="+", command=self.addValue)
         # Tools panel
         panel = tk.Frame(master=self)
         self.panel_tools = []
@@ -211,6 +212,7 @@ class MainWindow(tk.Tk):
         scrollerX.grid(column=0, columnspan=self.VISUAL_FACE, row=1)
         self.valuer.grid(column=self.VISUAL_FACE+1, columnspan=2, row=1)
         self.valueControl.grid(column=self.VISUAL_FACE+3, row=1)
+        addValueButton.grid(column=self.VISUAL_FACE+4, row=1)
         panel.grid(column=self.VISUAL_FACE+1, columnspan=3, row=3, rowspan=3)
         self.panel_tools[0].grid(column=0, row=0)
         self.panel_tools[1].grid(column=0, row=1)
@@ -486,6 +488,36 @@ class MainWindow(tk.Tk):
         x = self.curr[0]*self.ZOOM
         y = self.curr[1]*self.ZOOM
         self.pen(x, y, val, mode=self.showAs.get())
+    def addValue(self):
+        # Add new item or uppend a maximum on layer
+        layer = self.layers[self.layer]
+        currValue = self.source.layers[layer][self.currentCell]
+        limits = self.getLimits(self.currentCell)
+        pallette = self.pallettes.get(layer, None)
+        constructors = {"domains": lambda no: self.toolkit.domain(no, self.currentCell), "landscape": lambda no: self.toolkit.landscape(no, "new landscape"), "marks": lambda no: "new mark"}
+        isEntity = layer in constructors.keys()
+
+        if not isEntity and pallette is None:
+            currValue += 10
+            self.source.layers[layer][self.currentCell] += 10
+        elif isEntity:
+             currValue += 1
+             # add item in list
+             if limits[0] < currValue:
+                if layer == "domains":
+                    items = self.source.domains
+                elif layer == "landscape":
+                    items = self.source.landscapes
+                else:
+                    items = self.source.marks
+                newId = len(items) + 1
+                constructor = constructors[layer]
+                items.append(constructor(newId))
+        else:
+            return
+        self.source.layers[layer][self.currentCell] = currValue
+        if limits[0] < currValue:
+            self.rescale()
     #
     def showMeta(self, new=None):
         meta = self.source.meta if not new or new is None else {}
@@ -620,6 +652,7 @@ class MainWindow(tk.Tk):
         # Update with new values
         self.source = Map.Map(mapBox, generator=pattern)
         self.layers = self.source.layers.keys()
+        self.layers = [res._(name) for name in self.layers]
         self.layer = self.layers.index("domains")
         self.setValue.set(self.source.layers["domains"][self.currentCell])
         self.spinnable.set(str(self.source.layers["domains"][self.currentCell]))

@@ -1,7 +1,10 @@
-import os
+import os, sys
 import png
-from feodal import pngs
 import numpy as np
+if sys.hexversion < 0x030100F0:
+    import pngs
+else:
+    from feodal import pngs
 from scipy.ndimage.filters import gaussian_filter
 from scipy.ndimage.filters import median_filter
 import scipy

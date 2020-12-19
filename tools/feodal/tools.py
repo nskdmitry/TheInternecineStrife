@@ -1,10 +1,14 @@
 import math
-import os
+import os, sys
 import json
 from random import Random
 
-from feodal.constants import Environments
-import feodal.MapBackgroundGenerator as mbg
+if sys.hexversion < 0x030100F0:
+    from constants import Environments, Age, Orientation
+    import MapBackgroundGenerator as mbg
+else:
+    from feodal.constants import Environments, Age, Orientation
+    import feodal.MapBackgroundGenerator as mbg
 
 ###
 ### Instruments.
@@ -124,6 +128,13 @@ class Tools:
 
     def dwelling(self, no, subtype):
         return {'id': no, 'name': 'village', 'class': subtype, 'walls': {'height': 2, 'perimeter': 800, 'material': 1.0}} # Material - wood, side of wall = 200m, height = 2m
+
+    def landscape(self, no, title, civ=False):
+        scape = {"@class": "LandType", "ID": no, "Name": title, "Low": 300, "High": 500, "Hobbitable": 200, "Capacity": 1000, "Civilization": civ, "YieldLimit": 1.0, "YieldStart": 0.1, "Cross": 0.5, "Environment": Environments.Earth}
+        scape["Level"] = Age.Neolit
+        scape["Orient"] = Orientation.Food
+        scape["LimitWallHeight"] = 4.0
+        return scape
 
     # Conditional method for landscape's filter
 

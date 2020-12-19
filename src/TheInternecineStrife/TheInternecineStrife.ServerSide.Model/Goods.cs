@@ -28,6 +28,7 @@ namespace TheInternecineStrife.ServerSide.Model
         static Good()
         {
         	Resources = new List<Good> {
+        		new Good(0, "", 0f, GoodClass.Money),
         		// from Age.StoneAge
         		new Good( 1, "золото", 0f, GoodClass.Money),
         		new Good( 2, "мясо", 1.2f, GoodClass.Supplies),
@@ -40,10 +41,10 @@ namespace TheInternecineStrife.ServerSide.Model
         		new Good( 9, "копье с каменным наконечником", 7f, GoodClass.Item),
         		new Good(10, "задира", 2.5f, GoodClass.Mercenaries),
         		new Good(11, "охотник", 5f, GoodClass.Mercenaries),
+        		new Good(12, "дерево", 2.3f, GoodClass.Source),
         		// from Age.Neolit
-        		new Good(12, "хлеб", 1.2f, GoodClass.Supplies),
-        		new Good(13, "раб-скот", 3f, GoodClass.Worker),
-        		new Good(14, "дерево", 2.3f, GoodClass.Source),
+        		new Good(13, "хлеб", 1.2f, GoodClass.Supplies),
+        		new Good(14, "раб-скот", 3f, GoodClass.Worker),
         		new Good(15, "лук", 4.4f, GoodClass.Item),
         		new Good(16, "стрелы", 1f, GoodClass.Item),
         		new Good(17, "плетеный щит", 2.2f, GoodClass.Item),

@@ -1,5 +1,6 @@
 {
   "wastland": {
+    "@class": "LandType",
     "ID": 0,
     "Name": "пустошь",
     "Low": 200,
@@ -17,6 +18,7 @@
     "LimitWallHeight": 3.0
   },
   "field": {
+    "@class": "LandType",
     "ID": 1,
     "Name": "степь/луг",
     "Low": 200,
@@ -34,6 +36,7 @@
     "LimitWallHeight": 3.0
   },
   "forest": {
+    "@class": "LandType",
     "ID": 2,
     "Name": "лес",
     "Low": 100,
@@ -51,6 +54,7 @@
     "LimitWallHeight": 3.2
   },
   "highforest": {
+    "@class": "LandType",
     "ID": 3,
     "Name": "высокогорный лес",
     "Low": 2000,
@@ -68,6 +72,7 @@
     "LimitWallHeight": 2.2
   },
   "riverland": {
+    "@class": "LandType",
     "ID": 4,
     "Name": "пойма",
     "Low": -100,
@@ -85,6 +90,7 @@
     "LimitWallHeight": 3.0
   },
   "hills": {
+    "@class": "LandType",
     "ID": 5,
     "Name": "холмы",
     "Low": 400,
@@ -102,6 +108,7 @@
     "LimitWallHeight": 5.0
   },
   "mountains": {
+    "@class": "LandType",
     "ID": 6,
     "Name": "горы",
     "Low": 1000,
@@ -119,6 +126,7 @@
     "LimitWallHeight": 3.0
   },
   "platto": {
+    "@class": "LandType",
     "ID": 7,
     "Name": "плато",
     "Low": 1600,
@@ -136,6 +144,7 @@
     "LimitWallHeight": 5.0
   },
   "caverns": {
+    "@class": "LandType",
     "ID": 8,
     "Name": "пещеры",
     "Low": 1000,
@@ -152,6 +161,7 @@
     "Orient": 2
   },
   "beach": {
+    "@class": "LandType",
     "ID": 9,
     "Name": "пляжи",
     "Low": 0,
@@ -170,6 +180,7 @@
   },
 
   "nomads": {
+    "@class": "LandType",
     "ID": 10,
     "Name": "стан",
     "Low": 100,
@@ -187,6 +198,7 @@
     "LimitWallHeight": 2.0
   },
   "outpost": {
+    "@class": "LandType",
     "ID": 11,
     "Name": "застава",
     "Low": 100,
@@ -204,6 +216,7 @@
     "LimitWallHeight": 3.0
   },
   "village": {
+    "@class": "LandType",
     "ID": 12,
     "Name": "деревня",
     "Low": 0,
@@ -221,6 +234,7 @@
     "LimitWallHeight": 3.2
   },
   "aul": {
+    "@class": "LandType",
     "ID": 13,
     "Name": "аул",
     "Low": 1250,
@@ -238,6 +252,7 @@
     "LimitWallHeight": 3.2
   },
   "felling": {
+    "@class": "LandType",
     "ID": 14,
     "Name": "вырубка",
     "Low": 250,
@@ -255,6 +270,7 @@
     "LimitWallHeight": 2.0
   },
   "swampers": {
+    "@class": "LandType",
     "ID": 15,
     "Name": "болотники",
     "Low": -100,
@@ -272,6 +288,7 @@
     "LimitWallHeight": 1.0
   },
   "fishers": {
+    "@class": "LandType",
     "ID": 16,
     "Name": "рыбаки",
     "Low": -100,
@@ -289,6 +306,7 @@
     "LimitWallHeight": 2.0
   },
   "port": {
+    "@class": "LandType",
     "ID": 17,
     "Name": "порт",
     "Low": -100,
@@ -306,6 +324,7 @@
     "LimitWallHeight": 8.0
   },
   "camp": {
+    "@class": "LandType",
     "ID": 18,
     "Name": "бивак",
     "Low": 100,
@@ -323,6 +342,7 @@
     "LimitWallHeight": 3.0
   },
   "fort": {
+    "@class": "LandType",
     "ID": 19,
     "Name": "крепость",
     "Low": 210,
@@ -340,6 +360,7 @@
     "LimitWallHeight": 10.0
   },
   "stronghold": {
+    "@class": "LandType",
     "ID": 20,
     "Name": "оплот",
     "Low": 210,
@@ -357,6 +378,7 @@
     "LimitWallHeight": 12.0
   },
   "castle": {
+    "@class": "LandType",
     "ID": 21,
     "Name": "родовое гнездо",
     "Low": 210,
@@ -374,6 +396,7 @@
     "LimitWallHeight": 12.0
   },
   "cytadel": {
+    "@class": "LandType",
     "ID": 22,
     "Name": "твердыня",
     "Low": 210,
@@ -391,6 +414,7 @@
     "LimitWallHeight": 15.0
   },
   "palace": {
+    "@class": "LandType",
     "ID": 23,
     "Name": "дворец",
     "Low": 210,
@@ -408,6 +432,7 @@
     "LimitWallHeight": 6.0
   },
   "mines": {
+    "@class": "LandType",
     "ID": 24,
     "Name": "шахты",
     "Low": 3500,
@@ -425,6 +450,7 @@
     "LimitWallHeight": 0.0
   },
   "flood": {
+    "@class": "LandType",
     "ID": 25,
     "Name": "затопление",
     "Low": -0.250,
@@ -442,6 +468,7 @@
     "LimitWallHeight": 0.0
   },
   "forepost": {
+    "@class": "LandType",
     "ID": 26,
     "Name": "опорный пункт",
     "Low": 50,
@@ -460,6 +487,7 @@
   },
 
   "deep": {
+    "@class": "LandType",
     "ID": 27,
     "Name": "глубоководье",
     "Low": -10000,
@@ -477,6 +505,7 @@
     "LimitWallHeight": 0.0
   },
   "middle": {
+    "@class": "LandType",
     "ID": 28,
     "Name": "мелководье",
     "Low": -100,
@@ -494,6 +523,7 @@
     "LimitWallHeight": 0.0
   },
   "drift": {
+    "@class": "LandType",
     "ID": 29,
     "Name": "брод",
     "Low": -30,
@@ -511,6 +541,7 @@
     "LimitWallHeight": 0.0
   },
   "swamp": {
+    "@class": "LandType",
     "ID": 30,
     "Name": "болото",
     "Low": -100,
@@ -529,6 +560,7 @@
   },
 
   "cave": {
+    "@class": "LandType",
     "ID": 31,
     "Name": "жилая пещера",
     "Low": 2000,
@@ -546,6 +578,7 @@
     "LimitWallHeight": 1.0
   },
   "tillage": {
+    "@class": "LandType",
     "ID": 32,
     "Name": "пашня",
     "Low": 100,
@@ -563,6 +596,7 @@
     "LimitWallHeight": 1.0
   },
   "ferm": {
+    "@class": "LandType",
     "ID": 33,
     "Name": "хозяйство",
     "Low": 100,
@@ -580,6 +614,7 @@
     "LimitWallHeight": 1.0
   },
   "rice": {
+    "@class": "LandType",
     "ID": 34,
     "Name": "рисовое поле",
     "Low": -200,
@@ -597,6 +632,7 @@
     "LimitWallHeight": 1.0
   },
   "plantation": {
+    "@class": "LandType",
     "ID": 35,
     "Name": "плантация",
     "Low": 3,
@@ -614,6 +650,7 @@
     "LimitWallHeight": 1.2
   },
   "grave": {
+    "@class": "LandType",
     "ID": 36,
     "Name": "роща",
     "Low": 1200,
@@ -629,9 +666,10 @@
     "Level": 3,
     "Orient": 2,
     "LimitWallHeight": 1.0
-  }
+  },
 
-  , "sand": {
+  "sand": {
+    "@class": "LandType",
     "ID": 37,
     "Name": "пески",
     "Low": -200,
@@ -642,7 +680,7 @@
     "YieldLimit": 0.002,
     "YieldStart": 0.001,
     "Fortifiedness": 0.0025,
-    "Cross": 0.75,
+    "Cross": 0.85,
     "Environment": 1,
     "Level": 0,
     "Orient": 1,
@@ -650,6 +688,7 @@
   },
 
   "craftshop": {
+    "@class": "LandType",
     "ID": 38,
     "Name": "Посад",
     "Low": 10,
@@ -669,6 +708,7 @@
 
 
   "haven": {
+    "@class": "LandType",
     "ID": 39,
     "Name": "Пустота",
     "Low": 1000,

@@ -7,13 +7,20 @@ import argparse
 import logging
 from collections import Counter
 from operator import itemgetter
-
-from feodal import stats
-from feodal.lands import lands
-from feodal.constants import Environments, Age, Orientation
-import feodal.feods as feods
-import feodal.MapTemplate as MT
-from feodal.tools import Tools, loadJSON
+if sys.hexversion < 0x030100F0:
+    import stats
+    from lands import lands
+    from constants import Environments, Age, Orientation
+    import feods as feods
+    import MapTemplate as MT
+    from tools import Tools, loadJSON
+else:
+    from feodal import stats
+    from feodal.lands import lands
+    from feodal.constants import Environments, Age, Orientation
+    import feodal.feods as feods
+    import feodal.MapTemplate as MT
+    from feodal.tools import Tools, loadJSON
 
 import pdb
 
@@ -284,6 +291,39 @@ class Mountains(LayerGenerator):
         if phase is None:
             phase = tools.random.uniform(0, 2*math.pi)
         return [math.sin(2*math.pi*frequence*x / length + phase) for x in range(0, length)]
+
+class Bombing(LayerGenerator):
+    """ Make landscape with after-bombing heights amplittudes. """
+    def __init__(self, face, start=100, power = 1000, radius = 4, bombs = 20):
+        LayerGenerator.__init__(self, face)
+        self.power = abs(power)
+        self.Dia = abs(radius if radius != 0  else face // 5 + 1)
+        self._left = bombs
+        self.surface = start
+        self.extremums = 0
+        self.latest = [self.surface for i in range(0, self.size)]
+
+    def bomb(self, target, tools):
+        old = self.latest[target]
+        x, y = (tools.x(target), tools.y(target))
+        R = 3 * self.Dia
+        l, r = (max([x - R, 0]), min([x + R, self.face]))
+        t, b = (max([y - R, 0]), min([y + R, self.face]))
+        for i in range(t, b):
+            for j in range(l, r):
+                index = j + i * self.face
+                d = abs(x - j) + abs(y - i)
+                high = math.cos(((d + self.Dia) / self.Dia) * math.pi) * (self.latest[index] + self.power)
+                self.latest[index] = int(high)
+        self.latest[target] = old - self.power
+        return self.latest[target]
+
+    def generate(self, tools):
+        while self._left > 0:
+            target = tools.rand.randint(0, self.size)
+            self.bomb(target, tools)
+            self._left -= 1
+        return self.latest
 
 # Layer 0.5: Environments
 

@@ -8,10 +8,15 @@ import logging
 import numpy as np
 from collections import Counter
 
-from feodal.constants import Environments
-from feodal.lands import lands
-import feodal.feods
-from feodal import stats
+if sys.hexversion < 0x030100F0:
+    import stats, feods
+    from constants import Environments
+    from lands import lands
+else:
+    from feodal.constants import Environments
+    from feodal.lands import lands
+    import feodal.feods
+    from feodal import stats
 
 class MapGenAreaType:
     TERRA=1 #

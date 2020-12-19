@@ -1,13 +1,16 @@
 import glob
 import json
 import tarfile
-import os
+import os, sys
 import math
 #import MapTemplate as MT
 import datetime
 import time
 
-from feodal import lands
+if sys.hexversion < 0x030100F0:
+    import lands
+else:
+    from feodal import lands
 
 LAYERS = ['terrain', 'environments', 'landscape', 'buildings', 'dwellings', 'castles', 'populations', 'domains', 'armies', 'control', 'marks', 'commerce']
 
@@ -43,6 +46,8 @@ def load(mapName, path='.', temp='.'):
         arch.close()
     # Parse JSON files to data of map
     fname = maskJson.format(os.path.join(temp, mapName), 'meta')
+    if not os.path.exists(fname):
+        raise Exception("Metadata of map is not exists. File is defected.")
     with open(fname, 'r') as source:
         packet['meta'] = json.load(source)
     for info in ['landscape', 'domains', 'marks', 'dwellings']:
@@ -51,6 +56,9 @@ def load(mapName, path='.', temp='.'):
             continue
         with open(fname, 'r') as source:
             packet[info] = json.load(source)
+    # Landscape set of map can will basis. Map contains landset is not necessarily.
+    if len(packet['landscape']) == 0:
+        packet['landscape'] = lands.lands
     # Parse each layer (matrix of float values)
     for layer in LAYERS:
         block = loadLayer(mapName, layer, path=temp)

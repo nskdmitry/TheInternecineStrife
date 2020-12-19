@@ -21,67 +21,36 @@ namespace TheInternecineStrife.ServerSide.Model
 
     public class Treasury
     {
-        public GoodItem Gold = new GoodItem
-        {
-        	Type = Good.Resources[1-1],
-            Amount = 0
-        };
-        public GoodItem Supplies = new GoodItem()
-        {
-            Type = Good.Resources[2-1],
-            Amount = 0
-        };
-        public GoodItem Slaves = new GoodItem
-        {
-        	Type = Good.Resources[3-1],
-            Amount = 0
-        };
-        public GoodItem Raw = new GoodItem
-        {
-            Type = Good.Resources[4-1],
-            Amount = 0
-        };
-        public GoodItem Weapons = new GoodItem
-        {
-            Type = Good.Resources[7-1],
-            Amount = 0
-        };
-        
+    	public float Gold;
+    	public float Supplies;
+    	public float Raw;
+    	public int Weapons;
+    	
+    	public int Slaves;
         /// <summary>
         /// Наёмники
         /// </summary>
-        public List<GoodItem> Mercenaries = new List<GoodItem>();
+        public List<GoodItem> Mercenaries = new List<GoodItem>(10);
 
         public const double BUY_KOEFFICIENT = 1;
         public const double MERCENARY_COEFFICIENT = 3.5;
-        public double Cost {
-            get
-            {
-                return BUY_KOEFFICIENT * (
-                    Gold.Cost + Supplies.Cost + Raw.Cost + Weapons.Cost + Slaves.Cost 
-                    + Mercenaries.Sum((GoodItem squid) => { return squid.Cost; })
-                );
-            }
-        }
-
-        public Treasury(Age era = Age.StoneAge)
+        
+        public static Treasury operator +(Treasury accumulator, Treasury goods)
         {
-            
+        	var sum = new Treasury() {
+        		Gold = accumulator.Gold + goods.Gold,
+        		Supplies = accumulator.Supplies + goods.Supplies,
+        		Raw = accumulator.Raw + goods.Raw,
+        		Weapons = accumulator.Weapons + goods.Weapons,
+        	};
+        	sum.Slaves = accumulator.Slaves + goods.Slaves;
+        	sum.Mercenaries.AddRange(accumulator.Mercenaries);
+        	sum.Mercenaries.AddRange(goods.Mercenaries);
+        	
+            return sum;
         }
 
-        public static Treasury operator +(Treasury accumulator, Treasury source)
-        {
-            return new Treasury {
-        		Gold = new Good{Type=accumulator.Gold.Type, accumulator.Gold + source.Gold},
-                Raw = accumulator.Raw + source.Raw,
-                Supplies = accumulator.Supplies + source.Supplies,
-                Slaves = accumulator.Slaves + source.Slaves,
-                Weapons = accumulator.Weapons + source.Weapons,
-                Mercenaries = new ObservableCollection<GoodItem>(accumulator.Mercenaries.AddRange(source.Mercenaries))
-            };
-        }
-
-        public static Treasury operator *(Treasury source, double koefficient)
+        public static Treasury operator *(Treasury source, float koefficient)
         {
             return new Treasury {
                 Gold = koefficient * source.Gold,
@@ -105,11 +74,11 @@ namespace TheInternecineStrife.ServerSide.Model
 
         internal void Flush()
         {
-            Gold.Amount = 0;
-            Supplies.Amount = 0;
-            Raw.Amount = 0;
-            Weapons.Amount = 0;
-            Slaves.Amount = 0;
+            Gold = 0;
+            Supplies = 0;
+            Raw = 0;
+            Weapons = 0;
+            Slaves = 0;
             Mercenaries.Clear();
         }
 
@@ -117,16 +86,5 @@ namespace TheInternecineStrife.ServerSide.Model
         {
             return Gold.ToString("0.00");
         }
-
-        #region INotifyPropertyChanged implementation
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void NotifyPropertyChanged(String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion
-
     }
 }
