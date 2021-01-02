@@ -1,0 +1,7 @@
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.AI\bin\Debug\TheInternecineStrife.ServerSide.AI.dll
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.AI\bin\Debug\TheInternecineStrife.ServerSide.AI.pdb
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.AI\bin\Debug\TheInternecineStrife.ServerSide.Model.dll
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.AI\bin\Debug\TheInternecineStrife.ServerSide.Model.pdb
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.AI\obj\Debug\TheInternecineStrife.ServerSide.AI.csprojResolveAssemblyReference.cache
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.AI\obj\Debug\TheInternecineStrife.ServerSide.AI.dll
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.AI\obj\Debug\TheInternecineStrife.ServerSide.AI.pdb

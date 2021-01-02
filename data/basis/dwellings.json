@@ -1,0 +1,28 @@
+{
+  "camper": {
+    "ID": 1,
+    "Name": "Привал/пристанище",
+    "Age": 1,
+    "Fortifiedness": 0.0,
+    "Capability": 20,
+    "Start": 1,
+    "Cost": {
+      "Gold": 0,
+      "Time": 0,
+      "Man": 1,
+    },
+  },
+  "camping": {
+    "ID": 2,
+    "Name": "Бивак",
+    "Age": 1,
+    "Fortifiedness": 0.15,
+    "Capability": 1000,
+    "Start": 0,
+    "Cost": {
+      "Gold": 10.0,
+      "Time": 3,
+      "Man": 0
+    }
+  }
+}

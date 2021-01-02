@@ -1,0 +1,255 @@
+[
+  {
+    "Id": 1,
+    "Name": "Застрельщик",
+    "From": 0,
+    "Health": 10,
+    "Speed": 0.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 2,
+    "Name": "Пращник",
+    "From": 0,
+    "Health": 10,
+    "Speed": 0.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 3,
+    "Name": "Булавщик",
+    "From": 0,
+    "Health": 10,
+    "Speed": 0.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 4,
+    "Name": "Рубака стопором",
+    "From": 0,
+    "Health": 10,
+    "Speed": 0.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 5,
+    "Name": "Лёгкий копейщик",
+    "From": 0,
+    "Health": 10,
+    "Speed": 0.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 6,
+    "Name": "Копейщик в кожанной броне",
+    "From": 0,
+    "Health": 12,
+    "Speed": 0.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 7,
+    "Name": "Лёгкий лучник",
+    "From": 0,
+    "Health": 10,
+    "Speed": 0.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 8,
+    "Name": "Лучник в кожанной броне",
+    "From": 0,
+    "Health": 12,
+    "Speed": 0.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 9,
+    "Name": "Конный лучник",
+    "From": 1,
+    "Health": 10,
+    "Speed": 1.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 10,
+    "Name": "Конный застрельщик",
+    "From": 1,
+    "Health": 10,
+    "Speed": 1.5,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  },
+  {
+    "Id": 11,
+    "Name": "Колесница",
+    "From": 0,
+    "Health": 10,
+    "Speed": 1.2,
+    "Property": [
+      {
+        "Type": 9,
+        "Amount": 3
+      },
+      {
+        "Type": 7,
+        "Amount": 1
+      },
+      {
+        "Type": 1,
+        "Amount": 0.2
+      }
+    ],
+    "Malee": null,
+    "Range":  null
+  }
+]

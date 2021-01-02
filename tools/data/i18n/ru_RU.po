@@ -1,0 +1,297 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-12-05 11:20+0700\n"
+"PO-Revision-Date: 2020-12-05 11:39+0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"X-Poedit-Basepath: ../../gui\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-SearchPath-0: resources.py\n"
+
+#: resources.py:8
+msgid "File name"
+msgstr "Название файла"
+
+#: resources.py:9
+msgid "Enter the name of file/map"
+msgstr "Введите название карты"
+
+#: resources.py:9
+msgid "Name is required"
+msgstr "Название обязательно"
+
+#: resources.py:9
+msgid "{} is opened ({} edition)"
+msgstr "Открыт(-о) {} (в редакции за {})"
+
+#: resources.py:9
+msgid "Regen"
+msgstr "Пересоздать"
+
+#: resources.py:9
+msgid "Open"
+msgstr "Открыть"
+
+#: resources.py:9
+msgid "Save"
+msgstr "Сохр."
+
+#: resources.py:9
+msgid "Save as"
+msgstr "Сохр. как"
+
+#: resources.py:9
+msgid "Exit"
+msgstr "Выйти"
+
+#: resources.py:9
+msgid "File"
+msgstr "Файл"
+
+#: resources.py:9
+msgid "Visual"
+msgstr "Наглядно"
+
+#: resources.py:10
+msgid "Values"
+msgstr "Значения"
+
+#: resources.py:10
+msgid "Pincette"
+msgstr "Пинцет"
+
+#: resources.py:10
+msgid "Marking"
+msgstr "Пометить"
+
+#: resources.py:10
+msgid "Frame"
+msgstr "Рамка"
+
+#: resources.py:10
+msgid "Select"
+msgstr "Выбрать"
+
+#: resources.py:10
+msgid "Pen"
+msgstr "Карандаш"
+
+#: resources.py:10
+msgid "Fill"
+msgstr "Залить"
+
+#: resources.py:10
+msgid "Insert"
+msgstr "Добавить"
+
+#: resources.py:10
+msgid "Tools"
+msgstr "Инструменты"
+
+#: resources.py:10
+msgid "Load metadata..."
+msgstr "Загрузка общих данных..."
+
+#: resources.py:11
+msgid "Loading a map"
+msgstr "Загрузка карты"
+
+#: resources.py:11
+msgid "Please wait. Loading in progress..."
+msgstr "Всё в порядке, идёт загрузка..."
+
+#: resources.py:11
+msgid "Mapping data to controllers options..."
+msgstr "Меню настроек..."
+
+#: resources.py:11
+msgid "Init controlls..."
+msgstr "Панель управления..."
+
+#: resources.py:11
+msgid "Map metadata"
+msgstr "Данные карты"
+
+#: resources.py:11
+msgid "Domains"
+msgstr "Владени и области"
+
+#: resources.py:11
+msgid "Hierarchy"
+msgstr "Отношения"
+
+#: resources.py:11
+msgid "Marks"
+msgstr "Метки"
+
+#: resources.py:11
+msgid "Windows"
+msgstr "Окна"
+
+#: resources.py:11
+msgid "Map: {}"
+msgstr "Карта: {}"
+
+#: resources.py:12
+msgid "{}x{}"
+msgstr "{}x{}"
+
+#: resources.py:12
+msgid "Modify"
+msgstr "Править"
+
+#: resources.py:12
+msgid "Pinc"
+msgstr "Пинц."
+
+#: resources.py:12
+msgid "Mark"
+msgstr "Метка"
+
+#: resources.py:12
+msgid "Rect"
+msgstr "Рамка"
+
+#: resources.py:12
+msgid "Composising a controllers..."
+msgstr "Размещение элентов управления..."
+
+#: resources.py:12
+msgid "Draw a current map's layer..."
+msgstr "Отрисовка карты в окне..."
+
+#: resources.py:12
+msgid "Map generation"
+msgstr "Создание карты"
+
+#: resources.py:12
+msgid "Map in saving"
+msgstr "Карта сохраняется"
+
+#: resources.py:12
+msgid "Rasterization of layers..."
+msgstr "Отрисовка слоёв карты..."
+
+#: resources.py:13
+msgid "Save a map in file..."
+msgstr "Сохранение в фал..."
+
+#: resources.py:13
+msgid "Done"
+msgstr "Готово"
+
+#: resources.py:13
+msgid ""
+"Enter a name of new file/map. Map will rewrite if you close this window."
+msgstr "Введите название новой карты или карта будет перезаписана."
+
+#: resources.py:13
+msgid ""
+"Map is modified. If you will close now, you lost all changes. Are you want "
+"save and rewrite map?"
+msgstr ""
+"В карту были внесены изменения и вы можете их потерять. Вы хотите их "
+"сохранить?"
+
+#: resources.py:13
+msgid "Warning! Unsaved modifies."
+msgstr "Изменения не сохранены."
+
+#: resources.py:13
+msgid "File {} is not found (latest {})"
+msgstr ""
+
+#: resources.py:13
+msgid "Main options of Map"
+msgstr "Основные настройки карты"
+
+#: resources.py:13
+msgid "{} properties"
+msgstr "Сойства {}"
+
+#: resources.py:13
+msgid "Name:"
+msgstr "Название: "
+
+#: resources.py:13
+msgid "Size:"
+msgstr "Размеры:"
+
+#: resources.py:14
+msgid "Player's not more than:"
+msgstr "Число игроков не более:"
+
+#: resources.py:14
+msgid "Age by default:"
+msgstr "Эпоха по-умолчанию:"
+
+#: resources.py:14
+msgid "Heights diapazone:"
+msgstr "Амплитуда высот:"
+
+#: resources.py:14
+msgid "Top and Bottom cells count:"
+msgstr "Число экстримальных высот:"
+
+#: resources.py:14
+msgid "Map generator (pattern):"
+msgstr "Шаблон (генератор) карты:"
+
+#: resources.py:14
+msgid "OK"
+msgstr "OK"
+
+#: resources.py:14
+msgid "Cancel"
+msgstr "Отмена"
+
+#: resources.py:14
+msgid "Neolit"
+msgstr "Неолит"
+
+#: resources.py:14
+msgid "Bronze"
+msgstr "Бронзовый век"
+
+#: resources.py:14
+msgid "Iron"
+msgstr "Железный век"
+
+#: resources.py:15
+msgid "Midieval"
+msgstr "Средневековье"
+
+#: resources.py:15
+msgid "Industrial"
+msgstr "Новое время"
+
+#: resources.py:15
+msgid "File opening time error"
+msgstr "Ошибка при открытии файла"
+
+#: resources.py:15
+msgid "Error: file {}.feods not found in defined folders."
+msgstr "Файл {}.feods не найден ни по указанному пути, ни в основных папках."
+
+#: resources.py:15
+msgid "Please wait: our generator make a new map at foreground process..."
+msgstr "Карта создается генератором, подождите немного..."
+
+#: resources.py:15
+msgid "New"
+msgstr "Новая"
+
+#: resources.py:15
+msgid "Rename mark"
+msgstr "Изменить подпись"
+
+#: resources.py:15
+msgid "Enter new name of mark (old: {})"
+msgstr "Введите новый текст метки (раньше было \"{}\")"

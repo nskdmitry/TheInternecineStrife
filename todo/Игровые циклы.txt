@@ -1,0 +1,16 @@
+Сервер (EonServer). Общий цикл игры:
+
+{ Game, Event }
+while (!Event.Shutdown) {
+  Game.State.Update(Event);
+
+  try {
+    GetRequests(state = Game.State, Event);
+  } catch () {
+    ...
+  }
+  SendResponse(Game.State);
+}
+
+GetRequests:
+  state is 

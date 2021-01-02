@@ -7,6 +7,8 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using TheInternecineStrife.ServerSide.Model.War;
+using TheInternecineStrife.ServerSide.Model.War.Battle;
 
 namespace TheInternecineStrife.ServerSide.Model
 {
@@ -20,6 +22,9 @@ namespace TheInternecineStrife.ServerSide.Model
 		public bool Regular { get; set; }
 		public int NextPayDay { get; set; }
 		
+        public float Energy { get; set; }
+        public SoldierProfile Class { get; set; }
+        public Formation Formation { get; set; }
 		
 		public Army()
 		{
