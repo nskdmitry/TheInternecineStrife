@@ -66,6 +66,7 @@
     <Compile Include="Population.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocol\Behest.cs" />
+    <Compile Include="Protocol\Controllable.cs" />
     <Compile Include="SiegeMachine.cs" />
     <Compile Include="Treasury.cs" />
     <Compile Include="War\Battle\AttackBreaker.cs" />

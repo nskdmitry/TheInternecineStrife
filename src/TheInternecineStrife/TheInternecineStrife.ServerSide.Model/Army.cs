@@ -15,9 +15,8 @@ namespace TheInternecineStrife.ServerSide.Model
 	/// <summary>
 	/// Description of Army.
 	/// </summary>
-	public class Army
+	public class Army : Protocol.Controllable
 	{
-		public int Id { get; set; }
 		public int Strength { get; set; }
 		public bool Regular { get; set; }
 		public int NextPayDay { get; set; }
