@@ -1,11 +1,26 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Collections.Generic;
+using TheInternecineStrife.ServerSide.Model.War;
+using TheInternecineStrife.ServerSide.Model.Social;
 
 namespace TheInternecineStrife.ServerSide.Model
-{	
+{
+    /// <summary>
+    /// Подсветка (разведанность) клетки
+    /// </summary>
+    public enum Highlighting {
+        Hidden =0, // Сокрыть клетку
+        Terriain =1, // Известен тип местности
+        Politics =2, // Известно, какой области принадлежит.
+        Settlings =3, // Известно, есть ли поселение в клетке и чьё оно.
+        Armies =4, // Известно о том, что есть/нет армия и чья она.
+        Populations =5, // Известен состав населения клетки.
+        Forces =6, // Известен состав армии.
+        Full =7 // Клетка полностью подконтрольна игроку. Он знает о ней вообще всё!
+    };
+
 	/// <summary>
-	/// 
+	/// Игровая клетка.
 	/// </summary>
 	public class Cell : ISerializable
 	{
@@ -21,15 +36,17 @@ namespace TheInternecineStrife.ServerSide.Model
 		public Army Camp { get; set; }
 		public LandType Background { get; set; }
 		public Dwelling Settling { get; set; }
+        public Economic.Extraction Minigs { get; }
+        public Highlighting Known { get; set; }
 		
 		public int Welfare { 
 			get { return _welfare; } 
 			set {
-				if (value > 0 && value > WELFARE_AMPLITUDE) {
+				if (value > WELFARE_AMPLITUDE) {
 					_welfare = WELFARE_AMPLITUDE;
 					return;
 				}
-				if (value < 0 && -value > WELFARE_AMPLITUDE) {
+				if (-value > WELFARE_AMPLITUDE) {
 					_welfare = -WELFARE_AMPLITUDE;
 				}
 			}

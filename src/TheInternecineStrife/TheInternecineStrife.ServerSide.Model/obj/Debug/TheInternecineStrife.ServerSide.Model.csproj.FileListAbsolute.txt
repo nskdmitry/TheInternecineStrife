@@ -6,4 +6,6 @@ B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineSt
 B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.Model\bin\Debug\Newtonsoft.Json.xml
 B:\Projects\Games\TheInternecineStrife\bin.debug\TheInternecineStrife.ServerSide.Model.dll
 B:\Projects\Games\TheInternecineStrife\bin.debug\TheInternecineStrife.ServerSide.Model.pdb
-B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.Model\obj\Debug\TheInternecineStrife.ServerSide.Model.csprojResolveAssemblyReference.cache
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.Model\obj\Debug\TheInternecineStrife.ServerSide.Model.csprojAssemblyReference.cache
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.Model\obj\Debug\TheInternecineStrife.ServerSide.Model.csproj.CoreCompileInputs.cache
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.ServerSide.Model\obj\Debug\TheInternecineStrife.ServerSide.Model.csproj.CopyComplete

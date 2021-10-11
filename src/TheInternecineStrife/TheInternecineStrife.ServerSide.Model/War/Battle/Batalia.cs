@@ -6,15 +6,21 @@ namespace TheInternecineStrife.ServerSide.Model.War.Battle
 {
   public struct StrikeResult
   {
-    public int Attacks; // Сколько атаковало. Должно быть не больше суммы остальных полей.
-    public int Killed; // Скольких убили
-    public int Shallowed; // Легкораненых
-    public int Wounded; // Серьезно раненых
-    public int Heavyed; // При смерти
+     public int Attacks; // Сколько атаковало. Должно быть не больше суммы остальных полей.
+     public int Killed; // Скольких убили
+     public int Shallowed; // Легкораненых
+     public int Wounded; // Серьезно раненых
+     public int Heavyed; // При смерти
   }
+
+    /// <summary>
+    /// Полевое сражение или штурм города.
+    /// </summary>
+  public enum BattleType { FieldFight, StormDwelling };
 
   public class Batalia
   {
+    public readonly BattleType Is;
     public Cell Battleground;
     public BattleFormation Left;
     public BattleFormation Right;
@@ -22,6 +28,31 @@ namespace TheInternecineStrife.ServerSide.Model.War.Battle
     public int Times { get; set; } // Notified
 
     private static Random Doom = new Random();
+
+    const int DAY_LONG = 100;
+
+    public Batalia(int basicId, Cell battleground, Army inserters)
+    {
+        Battleground = battleground;
+        Times = 0;
+        var side = battleground.Camp;
+        if (side != null && side.Owner.Id != inserters.Owner.Id && side.Strength > 0 && side.Active)
+        {
+                Left = new BattleFormation(basicId + 1, battleground.Camp, true);
+                Right = new BattleFormation(basicId + 2, inserters, false);
+                Is = BattleType.FieldFight;
+                return;
+        }
+        side = battleground.Settling?.Guard;
+        if (side != null && side.Owner.Id != inserters.Owner.Id && inserters.Strength > 0 && inserters.Active)
+        {
+            Left = new BattleFormation(basicId + 1, side, true);
+            Right = new BattleFormation(basicId + 2, inserters, false);
+            Is = BattleType.StormDwelling;
+            return;
+        }
+        throw new ApplicationException("");
+    }
 
     public class Diapazone
     {

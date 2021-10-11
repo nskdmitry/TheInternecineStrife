@@ -54,7 +54,8 @@ namespace TheInternecineStrife.ServerSide.Model.War.Battle
     public Weapon Malee { get { return Side.Class.Malee; } }
     public Weapon Range { get { return Side.Class.Range; } }
     
-    public float Length { get { return Columns* Density; } }
+    public float Width { get { return Columns* Density; } }
+    public float Length { get { return Rows * Density; } }
 
     public bool CanFigth
     {

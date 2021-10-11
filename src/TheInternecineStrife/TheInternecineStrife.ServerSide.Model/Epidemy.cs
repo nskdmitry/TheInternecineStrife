@@ -91,10 +91,7 @@ namespace TheInternecineStrife.ServerSide.Model
             }
 
             powers.Strength = Math.Max(powers.Strength - deadSoldiers, 0);
-            populo.Men = Math.Max(populo.Men - deadMan, 0);
-            populo.Femen = Math.Max(populo.Femen - deadWoman, 0);
-            populo.Childrens = Math.Max(populo.Childrens - deadKids, 0);
-
+            populo.Death(deadMan, deadWoman, deadKids);
             return place;
         }
 

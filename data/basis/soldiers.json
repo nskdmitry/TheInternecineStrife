@@ -5,22 +5,20 @@
     "From": 0,
     "Health": 10,
     "Speed": 0.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
-    "Malee": null,
-    "Range":  null
+    "Malee": {
+      "Id": 4,
+      "Name": "копьё",
+      "Damage": 5.0,
+      "Far": 10.0,
+      "Near":  2.0
+    },
+    "Range":  {
+      "Id": 4,
+      "Name": "копьё",
+      "Damage": 5.0,
+      "Far": 10.0,
+      "Near":  2.0
+    }
   },
   {
     "Id": 2,
@@ -28,22 +26,20 @@
     "From": 0,
     "Health": 10,
     "Speed": 0.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
-    "Malee": null,
-    "Range":  null
+    "Malee": {
+      "Id": 8,
+      "Name": "праща",
+      "Damage": 5.5,
+      "Far": 25.0,
+      "Near": 4.0
+    },
+    "Range": {
+      "Id": 3,
+      "Name": "каменный нож",
+      "Damage": 3.0,
+      "Far": 2.0,
+      "Near": 0.5
+    }
   },
   {
     "Id": 3,
@@ -51,44 +47,28 @@
     "From": 0,
     "Health": 10,
     "Speed": 0.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
-    "Malee": null,
+    "Malee": {
+      "Id": 10,
+      "Name": "булава",
+      "Damage": 8.0,
+      "Far": 2.1,
+      "Near": 1.0
+    },
     "Range":  null
   },
   {
     "Id": 4,
-    "Name": "Рубака стопором",
+    "Name": "Рубака с топором",
     "From": 0,
     "Health": 10,
     "Speed": 0.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
-    "Malee": null,
+    "Malee": {
+      "Id": 6,
+      "Name": "каменный топор",
+      "Damage": 5.0,
+      "Far": 4.0,
+      "Near": 1.0
+    },
     "Range":  null
   },
   {
@@ -97,21 +77,13 @@
     "From": 0,
     "Health": 10,
     "Speed": 0.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
-    "Malee": null,
+    "Malee": {
+      "Id": 11,
+      "Name": "пика",
+      "Damage": 6.0,
+      "Far": 4.0,
+      "Near": 3.9
+    },
     "Range":  null
   },
   {
@@ -120,21 +92,13 @@
     "From": 0,
     "Health": 12,
     "Speed": 0.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
-    "Malee": null,
+    "Malee": {
+      "Id": 11,
+      "Name": "пика",
+      "Damage": 6.0,
+      "Far": 4.0,
+      "Near": 3.9
+    },
     "Range":  null
   },
   {
@@ -143,22 +107,20 @@
     "From": 0,
     "Health": 10,
     "Speed": 0.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
-    "Malee": null,
-    "Range":  null
+    "Malee": {
+      "Id": 3,
+      "Name": "каменный нож",
+      "Damage": 4.0,
+      "Far": 1.2,
+      "Near": 0.5
+    },
+    "Range": {
+      "Id": 5,
+      "Name": "простой лук",
+      "Damage": 5.0,
+      "Far": 50.0,
+      "Near":  3.0
+    }
   },
   {
     "Id": 8,
@@ -166,22 +128,20 @@
     "From": 0,
     "Health": 12,
     "Speed": 0.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
-    "Malee": null,
-    "Range":  null
+    "Malee": {
+      "Id": 3,
+      "Name": "каменный нож",
+      "Damage": 4.0,
+      "Far": 1.2,
+      "Near": 0.5
+    },
+    "Range": {
+      "Id": 5,
+      "Name": "простой лук",
+      "Damage": 5.0,
+      "Far": 50.0,
+      "Near":  3.0
+    }
   },
   {
     "Id": 9,
@@ -189,22 +149,20 @@
     "From": 1,
     "Health": 10,
     "Speed": 1.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
-    "Malee": null,
-    "Range":  null
+    "Malee": {
+      "Id": 3,
+      "Name": "каменный нож",
+      "Damage": 4.0,
+      "Far": 1.2,
+      "Near": 0.5
+    },
+    "Range": {
+      "Id": 12,
+      "Name": "рогатый лук",
+      "Damage": 8.0,
+      "Far": 80.0,
+      "Near": 5.0
+    }
   },
   {
     "Id": 10,
@@ -212,28 +170,20 @@
     "From": 1,
     "Health": 10,
     "Speed": 1.5,
-    "Property": [
-      {
-        "Type": 9,
-        "Amount": 3
-      },
-      {
-        "Type": 7,
-        "Amount": 1
-      },
-      {
-        "Type": 1,
-        "Amount": 0.2
-      }
-    ],
     "Malee": null,
-    "Range":  null
+    "Range": {
+      "Id": 4,
+      "Name": "копьё",
+      "Damage": 5.0,
+      "Far": 5.0,
+      "Near": 2.0 
+    }
   },
   {
     "Id": 11,
     "Name": "Колесница",
     "From": 0,
-    "Health": 10,
+    "Health": 12,
     "Speed": 1.2,
     "Property": [
       {
@@ -250,6 +200,12 @@
       }
     ],
     "Malee": null,
-    "Range":  null
+    "Range": {
+      "Id": 5,
+      "Name": "простой лук",
+      "Damage": 5.0,
+      "Far": 50.0,
+      "Near":  3.0
+    }
   }
 ]

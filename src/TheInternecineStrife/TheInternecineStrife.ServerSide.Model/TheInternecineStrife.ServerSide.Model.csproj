@@ -55,20 +55,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Army.cs" />
+    <Compile Include="Domain.cs" />
+    <Compile Include="Economic\Tender.cs" />
+    <Compile Include="Economic\Resource.cs" />
+    <Compile Include="Social\CraftOrder.cs" />
+    <Compile Include="Social\Stratum.cs" />
+    <Compile Include="Social\ThewGuild.cs" />
+    <Compile Include="Tools.cs" />
+    <Compile Include="War\Army.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="Dwelling.cs" />
     <Compile Include="Epidemy.cs" />
     <Compile Include="Fabrics\Production.cs" />
-    <Compile Include="Goods.cs" />
+    <Compile Include="Economic\Goods.cs" />
     <Compile Include="LandType.cs" />
     <Compile Include="Lord.cs" />
-    <Compile Include="Population.cs" />
+    <Compile Include="Social\Population.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Protocol\Behest.cs" />
     <Compile Include="Protocol\Controllable.cs" />
-    <Compile Include="SiegeMachine.cs" />
-    <Compile Include="Treasury.cs" />
+    <Compile Include="War\SiegeMachine.cs" />
+    <Compile Include="Economic\Treasury.cs" />
     <Compile Include="War\Battle\AttackBreaker.cs" />
     <Compile Include="War\Battle\Batalia.cs" />
     <Compile Include="War\Battle\BattleFormation.cs" />

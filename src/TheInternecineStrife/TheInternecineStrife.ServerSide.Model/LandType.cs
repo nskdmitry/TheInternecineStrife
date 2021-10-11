@@ -37,7 +37,7 @@ namespace TheInternecineStrife.ServerSide.Model
         public CellProfile Orient { set; get; }
         public PlaceType Envirounment { set; get; }
         public Age Level { set; get; }
-        public float Comfort { get { return 1 - Cross; } }
+        public float Comfort { get { return 1 - Cross; } set { Cross = 1 - value; } }
         
         // TODO Это тоже надо как-то интегрировать с landscape.json
         /** TODO Что, если данные о стоимости терраформирования не хранить в типе данных,
