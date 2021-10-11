@@ -1,0 +1,11 @@
+__pycache__
+tools/__pycache__/*
+demo/py2/__pycache__
+demo/py2/__pycache__/*
+demo/py3/__pycache__
+demo/py3/__pycache__/*
+tools/__pycache__
+*/._.DS_Store
+*/.DS_Store
+src/*/.vs/*
+src/*/.vs
