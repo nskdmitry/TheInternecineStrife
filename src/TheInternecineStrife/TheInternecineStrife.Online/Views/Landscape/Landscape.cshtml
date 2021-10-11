@@ -1,0 +1,108 @@
+﻿@model TheInternecineStrife.Online.Models.Landscape
+
+@{
+    ViewData["Title"] = "Landscape";
+}
+
+<h2>Landscape</h2>
+
+<div>
+    <h4>Landscape</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TextureId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TextureId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Low)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Low)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.High)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.High)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Civilization)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Civilization)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Hobbitable)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Hobbitable)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Capacity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Capacity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.YieldLimit)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.YieldLimit)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.YieldStart)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.YieldStart)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Cross)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Cross)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Orient)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Orient)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Envirounment)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Envirounment)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Level)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Level)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Comfort)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Comfort)
+        </dd>
+    </dl>
+</div>
+<div>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    <a asp-action="Index">Back to List</a>
+</div>
