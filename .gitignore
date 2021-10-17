@@ -2,6 +2,14 @@ bin
 bin.debug
 bin/*
 bin.debug/*
+src/TheInternecineStrife/TheInternecineStrife.Codex/bin
+src/TheInternecineStrife/TheInternecineStrife.Codex/obj
+src/TheInternecineStrife/TheInternecineStrife.Online/bin
+src/TheInternecineStrife/TheInternecineStrife.Codex/obj
+src/TheInternecineStrife/TheInternecineStrife.ServerSide/bin
+src/TheInternecineStrife/TheInternecineStrife.ServerSide/obj
+src/TheInternecineStrife/TheInternecineStrife.ServerSide.AI/bin
+src/TheInternecineStrife/TheInternecineStrife.ServerSide.AI/obj
 src/TheInternecineStrife/*/bin/*
 src/TheInternecineStrife/*/obj/*
 src/TheInternecineStrife/packages
