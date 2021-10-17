@@ -1,3 +1,5 @@
+bin
+bin.debug
 bin/*
 bin.debug/*
 src/TheInternecineStrife/*/bin/*
