@@ -1,9 +1,9 @@
 B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\bin\Debug\TheInternecineStrife.Codex.dll
 B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\bin\Debug\TheInternecineStrife.Codex.pdb
 B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\bin\Debug\TheInternecineStrife.ServerSide.Model.dll
-B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\bin\Debug\Newtonsoft.Json.dll
 B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\bin\Debug\TheInternecineStrife.ServerSide.Model.pdb
-B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\bin\Debug\Newtonsoft.Json.xml
-B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\obj\Debug\TheInternecineStrife.Codex.csprojResolveAssemblyReference.cache
 B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\obj\Debug\TheInternecineStrife.Codex.dll
 B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\obj\Debug\TheInternecineStrife.Codex.pdb
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\obj\Debug\TheInternecineStrife.Codex.csprojAssemblyReference.cache
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\obj\Debug\TheInternecineStrife.Codex.csproj.CoreCompileInputs.cache
+B:\Projects\Games\TheInternecineStrife\src\TheInternecineStrife\TheInternecineStrife.Codex\obj\Debug\TheInternecineStrife.Codex.csproj.CopyComplete
