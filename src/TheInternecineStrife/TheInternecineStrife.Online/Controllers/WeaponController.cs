@@ -15,7 +15,8 @@ namespace TheInternecineStrife.Online.Controllers
     {
         private readonly IWeapon _allWeapons;
 
-        public WeaponController(IWeapon dateset) => _allWeapons = dateset ?? throw new ArgumentNullException(nameof(dateset));
+        public WeaponController(IWeapon dateset) => 
+            _allWeapons = dateset ?? throw new ArgumentNullException(nameof(dateset));
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Weapon>> GetWeapon(int id)
