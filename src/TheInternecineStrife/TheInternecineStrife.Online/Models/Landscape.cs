@@ -18,10 +18,10 @@ namespace TheInternecineStrife.Online.Models
         public Landscape(int id, LandType land) : base(id, land.Name, land.Hobbitable, land.YieldLimit, land.Cross, land.Civilization, land.Envirounment, land.Orient, land.Level)
         {
             Capacity = land.Capacity;
-            this.Comfort = land.Comfort;
-            this.High = land.High;
-            this.Low = land.Low;
-            this.YieldStart = land.YieldStart;
+            Comfort = land.Comfort;
+            High = land.High;
+            Low = land.Low;
+            YieldStart = land.YieldStart;
         }
     }
 }

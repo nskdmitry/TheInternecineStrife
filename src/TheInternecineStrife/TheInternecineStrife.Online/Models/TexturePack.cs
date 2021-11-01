@@ -12,5 +12,14 @@ namespace TheInternecineStrife.Online.Models
     {
         public int Id { get; set; }
         public string Path { get; set; }
+        public byte[] Content { get; private set; }
+        public bool Loaded { get; private set; } = false;
+
+        public TexturePack Load()
+        {
+            //Content = new byte[1024];
+            //Loaded = false;
+            return this;
+        }
     }
 }
