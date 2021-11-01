@@ -1,0 +1,98 @@
+[
+	{
+		"Id": 0,
+		"Name": "stones",
+		"_Name": "камни",
+		"Damage": 1,
+		"Attack": 1,
+		"Price": {
+			"Gold": 0.00001
+		},
+		"Distance": 5,
+		"Resource": 20
+	},
+	{
+		"Id": 1,
+		"Name": "Stone",
+		"_Name": "",
+		"Damage": 1,
+		"Attack": 0,
+		"Price": {
+			"Gold": 0.00001
+		},
+		"Distance": 1,
+		"Resource": 10
+	},
+	{
+		"Id": 2,
+		"Name": "woodspear",
+		"_Name": "",
+		"Damage": 2,
+		"Attack": 0,
+		"Price": {
+			"Gold": 0.20000
+		},
+		"Distance": 2,
+		"Resource": 20
+	},
+	{
+		"Id": 3,
+		"Name": "stonespear",
+		"_Name": "",
+		"Damage": 4,
+		"Attack": 0,
+		"Price": {
+			"Gold": 0.30000
+		},
+		"Distance": 2,
+		"Resource": 25
+	},
+	{
+		"Id": 4,
+		"Name": "stonedart",
+		"_Name": "",
+		"Damage": 3,
+		"Attack": 1,
+		"Price": {
+			"Gold": 0.30000
+		},
+		"Distance": 12,
+		"Resource": 3
+	},
+	{
+		"Id": 5,
+		"Name": "bronzespear",
+		"_Name": "",
+		"Damage": 4,
+		"Attack": 0,
+		"Price": {
+			"Gold": 0.75000
+		},
+		"Distance": 3,
+		"Resource": 100
+	},
+	{
+		"Id": 6,
+		"Name": "bronzepike",
+		"_Name": "",
+		"Damage": 6,
+		"Attack": 0,
+		"Price": {
+			"Gold": 1.10000
+		},
+		"Distance": 4,
+		"Resource": 150
+	},
+	{
+		"Id": 7,
+		"Name": "bronzedart",
+		"_Name": "",
+		"Damage": 4,
+		"Attack": 1,
+		"Price": {
+			"Gold": 0.75000
+		},
+		"Distance": 12,
+		"Resource": 3
+	}
+]

@@ -4,8 +4,8 @@ import core.world as world
 weapons = []
 weapons.append(battle.Weapon(name="stones", damage=1, typeRange=battle.Attack.RANGE, price={"gold": 0}, d=8)) #0
 weapons.append(battle.Weapon(name="stone", damage=1, typeRange=battle.Attack.MALEE, price={"gold": 0}, d=0)) #1
-weapons.append(battle.Weapon(name="woodspear", damage=3, typeRange=battle.Attack.MALEE, price={"gold": 0.2}, d=2, resource=100)) #2
-weapons.append(battle.Weapon(name="stonespear", damage=4, typeRange=battle.Attack.MALEE, price={"gold": 0.3}, d=2, resource=100)) #3
+weapons.append(battle.Weapon(name="woodspear", damage=3, typeRange=battle.Attack.MALEE, price={"gold": 0.2}, d=2, resource=20)) #2
+weapons.append(battle.Weapon(name="stonespear", damage=4, typeRange=battle.Attack.MALEE, price={"gold": 0.3}, d=2, resource=20)) #3
 weapons.append(battle.Weapon(name="stonedart", damage=4, typeRange=battle.Attack.RANGE, price={"gold": 0.3}, d=12, resource=3)) #4
 weapons.append(battle.Weapon(name="bronzespear", damage=6, typeRange=battle.Attack.MALEE, price={"gold": 0.75}, d=3, resource=100)) #5
 weapons.append(battle.Weapon(name="bronzepike", damage=6, typeRange=battle.Attack.MALEE, price={"gold": 1.0}, d=4, resource=100)) #6

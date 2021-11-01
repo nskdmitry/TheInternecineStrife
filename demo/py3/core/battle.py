@@ -6,7 +6,7 @@ import json
 
 history = logging.getLogger("battle.py")
 history.setLevel(logging.DEBUG)
-fh = logging.FileHandler(filename="../history.log")
+fh = logging.FileHandler(filename="../../../logs/history.log")
 fmt = bytes("%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s", "utf-8")
 formatter = logging.Formatter(str(fmt))
 fh.setFormatter(formatter)
