@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TheInternecineStrife.ServerSide.Model.Economic;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -17,7 +17,13 @@ namespace TheInternecineStrife.ServerSide.Model.War
         public float Speed;
         public Weapon Malee;
         public Weapon Range;
-        public bool Machined { get; }
+        public bool Machined { protected set; get; }
+
+        public const float HAVY_MARSH_SPEED = 4.0f;
+        public const float LIGHT_RUN_SPEED = 10.0f;
+        public const float CHARIOT_SPEED = 24.0f;
+        public const float LIGHT_HORSE_SPEED = 36;
+        public const float KNIGHT_HORSE_SPEED = 21;
         
         public GoodItem[] Property;
         
@@ -28,8 +34,8 @@ namespace TheInternecineStrife.ServerSide.Model.War
             var path = Path.Combine(Path.GetFullPath(".."), "data", "basic", "soldiers.json"); ;
             if (File.Exists(path))
             {
-                var content = File.ReadAllText(path);
-                Basic.AddRange(JsonConvert.DeserializeObject<SoldierProfile[]>(content));
+                //var content = File.ReadAllText(path);
+                //Basic.AddRange(JsonConvert.DeserializeObject<SoldierProfile[]>(content));
             }
         }
 
