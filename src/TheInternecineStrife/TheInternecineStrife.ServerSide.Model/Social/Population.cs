@@ -23,7 +23,9 @@ namespace TheInternecineStrife.ServerSide.Model.Social
         public Stratum Slaves = new Stratum(StratumClass.Classes[6]);
 
         public int Men { get { return Nobility.Man + Merchantes.Man + ArtistCraft.Man + Clir.Man + Freeman.Man + Serfs.Man; } }
-        public int Femen { get { return Nobility.Feman + Merchantes.Feman + ArtistCraft.Feman + Clir.Feman + Freeman.Feman + Serfs.Feman; } }
+        public int Femen {
+            get { return Nobility.Feman + Merchantes.Feman + ArtistCraft.Feman + Clir.Feman + Freeman.Feman + Serfs.Feman; }
+        }
         public int Childrens
         {
             get

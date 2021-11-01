@@ -13,17 +13,17 @@ namespace TheInternecineStrife.Online.Mocks
 
         public MockLandscapeSet()
         {
-            _set.Add(new Landscape(0, "Air", 0, 0, 0, false, PlaceType.Air, CellProfile.Agrary, Age.StoneAge) { TextureId = 1 });
+            _set.Add(new Landscape(0, "Air", 0, 0, 0, false, PlaceType.Air, CellProfile.Agrary, Age.StoneAge) { TextureId = 2 });
             foreach (var item in LandType.Set)
             {
                 var terra = item.Value;
-                _set.Add(new Landscape(terra.Id + 1, terra) { TextureId = terra.Id + 2 });
+                _set.Add(new Landscape(terra.Id + 1, terra) { TextureId = terra.Id + 3 });
             }
         }
 
         public Landscape GetLandscape(int id)
         {
-            return _set.ElementAt(id - 1);
+            return _set.ElementAt(id);
         }
 
         public IEnumerable<Landscape> Landscapes

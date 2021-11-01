@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using System.IO;
 
 namespace TheInternecineStrife.ServerSide.Model
@@ -105,11 +103,11 @@ namespace TheInternecineStrife.ServerSide.Model
             var path = Path.Combine(Path.GetFullPath(".."), "data", "basic", "landscape.json");
             if (File.Exists(path))
             {
-                var content = File.ReadAllText(path);
-                Set = JsonConvert.DeserializeObject<Dictionary<string, LandType>>(content);
-                return;
+                //var content = File.ReadAllText(path);
+                //Set = JsonConvert.DeserializeObject<Dictionary<string, LandType>>(content);
+                //return;
             }
-            Console.WriteLine(String.Format("Load from {}: file not found", path));
+            //Console.WriteLine(String.Format("Load from {}: file not found", path));
             Set =  new Dictionary<string, LandType>{
             	{"westland", new LandType(0, "пустошь", 1000, 0.030f, 0.25f, false, PlaceType.Earth, CellProfile.War, Age.StoneAge) },
             	{"fields", new LandType(1, "луг", 1000, 0.010f, 0.2f, false, PlaceType.Earth, CellProfile.TaxOnly, Age.StoneAge) },
@@ -131,6 +129,6 @@ namespace TheInternecineStrife.ServerSide.Model
 		
         public static readonly Dictionary<string, LandType> Set;
 
-        public static readonly LandType Default = Set["westland"];
+        public static readonly LandType Default = new LandType(0, "пустошь", 1000, 0.030f, 0.25f, false, PlaceType.Earth, CellProfile.War, Age.StoneAge);
     }
 }

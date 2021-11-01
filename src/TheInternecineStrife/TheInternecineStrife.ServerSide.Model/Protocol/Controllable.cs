@@ -10,6 +10,6 @@ namespace TheInternecineStrife.ServerSide.Model.Protocol
         public int Id { get; set; }
         public string Name { get; set; }
         public bool Active { get; set; }
-        public Controllable Owner { get; set; }
+        public Controllable Owner { get; protected set; }
     }
 }

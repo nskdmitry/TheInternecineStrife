@@ -16,6 +16,8 @@ if sys.hexversion < 0x030100F0:
     import tkFileDialog as filedialog
     import tkSimpleDialog as simpledialog
     import dialogs
+    import controls as ctrls
+    import panels
     import resources as res
     from feodal.constants import Age, Environments
 else:
@@ -23,6 +25,8 @@ else:
     from tkinter import ttk, messagebox, filedialog, simpledialog
     import gui.dialogs as dialogs
     import gui.resources as res
+    import gui.controls as ctrls
+    import gui.panels as panels
     from feodal.constants import Age, Environments
 import new_map
 
@@ -40,12 +44,6 @@ class MainWindow(tk.Tk):
 
     SHOW_MODE_IMAGE=0
     SHOW_MODE_VALUES=1
-
-    USE_TOOL_GET=0
-    USE_TOOL_PEN=1
-    USE_TOOL_SELECT=2
-    USE_TOOL_RECT=3
-    USE_TOOL_FILL=4
 
     def __init__(self, mapBox, rootFolder, basic=None, pallettes = {}, to_open=False):
         """ Initial user interface """
@@ -110,12 +108,12 @@ class MainWindow(tk.Tk):
         self.capitals = self.source.layers['castles']
         #
         self.showAs = tk.IntVar(value=self.SHOW_MODE_IMAGE)
-        self.tool = tk.IntVar(value=self.USE_TOOL_GET)
+        self.tool = tk.IntVar(value=ctrls.SelectionTool.USE_TOOL_GET)
         self.setValue = tk.IntVar(value=self.source.layers["domains"][0])
         self.spinnable = tk.StringVar(value=self.source.layers["domains"][0])
         self.curr = (0, 0)
         self.currentCell = 0
-        self.selection = set({})
+        self.selection = []
         if len(self.source.domains) == 0:
             self.source.domains.append(self.toolkit.domain(0, -5))
         splash.progress['value'] += 5
@@ -145,13 +143,13 @@ class MainWindow(tk.Tk):
         tools_menu = tk.Menu(self.menu)
         select_menu = tk.Menu(tools_menu)
         set_tool = lambda: self.updTool(None)
-        select_menu.add_radiobutton(label=res.str_resources[12], var=self.tool, value=self.USE_TOOL_GET, command=set_tool, underline=1)
-        select_menu.add_radiobutton(label=res.str_resources[13], var=self.tool, value=self.USE_TOOL_SELECT, command=set_tool, underline=1)
-        select_menu.add_radiobutton(label=res.str_resources[14], var=self.tool, value=self.USE_TOOL_RECT, command=set_tool, underline=1)
+        select_menu.add_radiobutton(label=res.str_resources[12], var=self.tool, value=ctrls.SelectionTool.USE_TOOL_GET, command=set_tool, underline=1)
+        select_menu.add_radiobutton(label=res.str_resources[13], var=self.tool, value=ctrls.SelectionTool.USE_TOOL_SELECT, command=set_tool, underline=1)
+        select_menu.add_radiobutton(label=res.str_resources[14], var=self.tool, value=ctrls.SelectionTool.USE_TOOL_RECT, command=set_tool, underline=1)
         tools_menu.add_cascade(label=res.str_resources[15], menu=select_menu)
         mouse_menu = tk.Menu(tools_menu)
-        mouse_menu.add_radiobutton(label=res.str_resources[16], var=self.tool, value=self.USE_TOOL_PEN, command=set_tool, underline=0)
-        mouse_menu.add_radiobutton(label=res.str_resources[17], var=self.tool, value=self.USE_TOOL_FILL, command=set_tool)
+        mouse_menu.add_radiobutton(label=res.str_resources[16], var=self.tool, value=ctrls.Processor.USE_TOOL_PEN, command=set_tool, underline=0)
+        mouse_menu.add_radiobutton(label=res.str_resources[17], var=self.tool, value=ctrls.Processor.USE_TOOL_FILL, command=set_tool)
         tools_menu.add_cascade(label=res.str_resources[18], menu=mouse_menu, underline=1)
         self.menu.add_cascade(label=res.str_resources[19], menu=tools_menu, underline=0)
         # [Windows]
@@ -190,16 +188,20 @@ class MainWindow(tk.Tk):
         # Tools panel
         panel = tk.Frame(master=self)
         self.panel_tools = []
-        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[33], command=lambda: self.updTool(self.USE_TOOL_GET)) )
-        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[16], command=lambda: self.updTool(self.USE_TOOL_PEN)) )
-        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[34], command=lambda: self.updTool(self.USE_TOOL_SELECT)) )
-        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[35], command=lambda: self.updTool(self.USE_TOOL_RECT)) )
-        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[17], command=lambda: self.updTool(self.USE_TOOL_FILL)) )
+        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[33], command=lambda: self.updTool(ctrls.SelectionTool.USE_TOOL_GET)) )
+        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[16], command=lambda: self.updTool(ctrls.Processor.USE_TOOL_PEN)) )
+        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[34], command=lambda: self.updTool(ctrls.SelectionTool.USE_TOOL_SELECT)) )
+        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[35], command=lambda: self.updTool(ctrls.SelectionTool.USE_TOOL_RECT)) )
+        self.panel_tools.append( tk.Button(master=panel, text=res.str_resources[17], command=lambda: self.updTool(ctrls.Processor.USE_TOOL_FILL)) )
         for btn in self.panel_tools:
             btn.config(relief="flat")
         self.panel_tools[0].config(relief="raised")
         splash.progress['value'] += 5
         splash.progress.update()
+        
+        # Init edit tools:
+        self.roll_val = ctrls.MouseRegulator(self, sensivity=120) # Use mouse wheel to change a value of selections.
+        self.roll_val.active = True
 
         # Show window
         splash.message.set(res.str_resources[36])
@@ -405,7 +407,7 @@ class MainWindow(tk.Tk):
             return
         self.curr = (i, j)
         self.currentCell = i + j * self.source.face
-        if tool == self.USE_TOOL_GET:
+        if tool == ctrls.SelectionTool.USE_TOOL_GET:
             val = self.curr_layer[self.currentCell]
             self.valuer.set(val)
             # Update populations limit
@@ -413,13 +415,13 @@ class MainWindow(tk.Tk):
             layerName = self.layers[self.layer]
             if layerName == "populations":
                 self.rescale()
-        elif tool == self.USE_TOOL_PEN:
+        elif tool == ctrls.Processor.USE_TOOL_PEN:
             val = self.valuer.get()
             x, y = (i * self.ZOOM, j * self.ZOOM)
             if val != self.curr_layer[self.currentCell]:
                 self.curr_layer[self.currentCell] = val
                 self.pen(x, y, val, mode=self.showAs.get(), capital=self.capitals[self.currentCell])
-        elif tool == self.USE_TOOL_SELECT:
+        elif tool == ctrls.Processor.USE_TOOL_SELECT:
             if self.currentCell in self.selection:
                 self.selection.remove(self.currentCell)
             else:

@@ -32,7 +32,15 @@ namespace TheInternecineStrife.Online
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddTransient<Interfaces.ITexture, Mocks.MockTexturePack>();
             services.AddTransient<Interfaces.ILandscapes, Mocks.MockLandscapeSet>();
+            services.AddTransient<Interfaces.IWeapon, Mocks.MockWeaponsList>();
+            services.AddTransient<Interfaces.IEpidemy, Mocks.MockEpidemies>();
+            services.AddTransient<Interfaces.IStratum, Mocks.MockStratums>();
+            services.AddTransient<Interfaces.IPopulations, Mocks.MockPopulations>();
+            services.AddTransient<Interfaces.IArmies, Mocks.MockArmies>();
+            services.AddTransient<Interfaces.IRegiment, Mocks.MockArmies>();
+            services.AddTransient<Interfaces.ISoldierProfile, Mocks.MockSoldierProfiles>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -59,30 +59,40 @@ namespace TheInternecineStrife.ServerSide.Model.Social
                 {Age.IronAge, SoldierProfile.Basic[23] },
                 {Age.MiddleAge, SoldierProfile.Basic[30] }
             },
-                // Купцы приносят золото в карманы жителей поселка (свои,конечно же).
-                Production = (Stratum group, Cell place) => { place.Settling.Founds += place.Settling.Founds * (1 + group.Man / 100); }
+                // Купцы приносят золото в карманы жителей поселка (свои, конечно же).
+                Production = (Stratum group, Cell place) => { place.Settling.Founds = place.Settling.Founds * (1 + group.Man / 100); }
             },
             new StratumClass(2, "ремесленники", true, 8) { MilitaryClasses = new Dictionary<Age, SoldierProfile>
-            {
-                {Age.StoneAge, SoldierProfile.Basic[3] },
-                {Age.Neolit, SoldierProfile.Basic[10] },
-                {Age.Bronze, SoldierProfile.Basic[17] },
-                {Age.IronAge, SoldierProfile.Basic[24] },
-                {Age.MiddleAge, SoldierProfile.Basic[31] }
-            },
+                {
+                    {Age.StoneAge, SoldierProfile.Basic[3] },
+                    {Age.Neolit, SoldierProfile.Basic[10] },
+                    {Age.Bronze, SoldierProfile.Basic[17] },
+                    {Age.IronAge, SoldierProfile.Basic[24] },
+                    {Age.MiddleAge, SoldierProfile.Basic[31] }
+                },
                 // Ремесленники выполняют заказы на снаряжение войск. Нет заказа - нет работы.
-                Production = (Stratum group, Cell place) => { }
+                Production = (Stratum group, Cell place) => {
+                    var order = group.CurrentOrder;
+                    if (order == null || order.Left == 0)
+                    {
+                        return;
+                    }
+                }
             },
             new StratumClass(3, "врачи", false, 25) {
                 // Врачи сокращают смертность при эпидемии.
-                Production = (Stratum group, Cell place) => { },
+                Production = (Stratum group, Cell place) => {
+                    
+                },
                 // Врачи пополняют медбригады 
                 CallToMilitary = (Stratum group, Army military) => { military.Formation.Medics += (new Random()).Next(group.Man); }
             },
             new StratumClass(4, "свободные", true, 0.5f) {
+                // Свободные крестьяне и мещане вооружатся, чем могут
                 MilitaryClasses = new Dictionary<Age, SoldierProfile> {
 
                 },
+                // Зарабатывают деньги и платят налоги
                 Production = (Stratum group, Cell place) => { }
             },
             new StratumClass(5, "крепостные", true, 0.01f) {
@@ -114,7 +124,7 @@ namespace TheInternecineStrife.ServerSide.Model.Social
         public int Kids { get; set; }
         public int Called {
             get { return _calls; }
-            private set
+            protected set
             {
                 if (_calls == value)
                 {
@@ -126,11 +136,11 @@ namespace TheInternecineStrife.ServerSide.Model.Social
         }
         public float Satisfaction {
             get { return _satisfaction; }
-            private set { _satisfaction = Math.Min(1f, value); }
+            protected set { _satisfaction = Math.Min(1f, value); }
         }
         public CraftOrder CurrentOrder;
-        public int AdultedMen { get; private set; }
-        public int AdultedWomen { get; private set; }
+        public int AdultedMen { get; protected set; }
+        public int AdultedWomen { get; protected set; }
 
         public Army CallMilitary(Age age, Army military = null)
         {

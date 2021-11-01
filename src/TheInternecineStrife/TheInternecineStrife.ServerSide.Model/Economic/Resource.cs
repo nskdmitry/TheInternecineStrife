@@ -43,7 +43,7 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
 
         public float CurrentProfit(float instrument)
         {
-            return (float)(Math.Min(Profit, instrument) * Available / Amount);
+            return Math.Min(Profit, instrument) * Available / Amount;
         }
 
         public float Extract(int workers, float instrument)

@@ -11,11 +11,11 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("TheInternecineStrife.Online")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Мироненко Дмитрий")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("TheInternecineStrife.Online")]
+[assembly: System.Reflection.AssemblyProductAttribute("Междоусобица.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TheInternecineStrife.Online")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
