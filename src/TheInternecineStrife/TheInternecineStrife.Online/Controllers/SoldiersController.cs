@@ -14,10 +14,18 @@ namespace TheInternecineStrife.Online.Controllers
     {
         private Interfaces.ISoldierProfile source;
 
-        [HttpGet]
-        public async Task<ActionResult<List<SoldierProfile>>> List() => new ObjectResult(source.List);
+        public SoldiersController(Interfaces.ISoldierProfile datasource)
+        {
+            source = datasource;
+        }
 
-        [HttpGet("{id}")]
+        [HttpGet("classes")]
+        public async Task<ActionResult<List<SoldierProfile>>> Soldiers() => new ObjectResult(source.List.Where(item => !item.Machined));
+
+        [HttpGet("machines")]
+        public async Task<ActionResult<List<SoldierProfile>>> Machines() => new ObjectResult(source.List.Where(item => item.Machined));
+
+        [HttpGet("warclass/{id}")]
         public async Task<ActionResult<SoldierProfile>> Get(uint id) => new ObjectResult(source.Get(id));
 
         [HttpPut]
