@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace TheInternecineStrife.ServerSide.Model.War
+﻿namespace TheInternecineStrife.ServerSide.Model.War
 {
     public class Weapon
     {
