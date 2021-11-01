@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <Product>Междоусобица.API</Product>
+    <Authors>Мироненко Дмитрий</Authors>
   </PropertyGroup>
 
   <ItemGroup>
