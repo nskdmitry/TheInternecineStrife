@@ -889,3 +889,4 @@ class DomainInfoWindow(dialogs.Dialog):
         self.info['capital'] = self.cells.keys()[noCapital]
         self.info['owner'] = self.lordsList.current()
         return self.info
+
