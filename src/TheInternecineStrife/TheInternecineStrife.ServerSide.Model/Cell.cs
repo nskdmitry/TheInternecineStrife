@@ -36,7 +36,7 @@ namespace TheInternecineStrife.ServerSide.Model
 		public Army Camp { get; set; }
 		public LandType Background { get; set; }
 		public Dwelling Settling { get; set; }
-        public Economic.Extraction Minigs { get; }
+        public Economic.Extraction Minigs { get; set; }
         public Highlighting Known { get; set; }
 		
 		public int Welfare { 
@@ -49,6 +49,7 @@ namespace TheInternecineStrife.ServerSide.Model
 				if (-value > WELFARE_AMPLITUDE) {
 					_welfare = -WELFARE_AMPLITUDE;
 				}
+                _welfare = value;
 			}
 		}
 		
