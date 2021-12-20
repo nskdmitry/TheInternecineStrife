@@ -23,6 +23,7 @@ demo/py3/__pycache__/*
 *.pyc
 */._.DS_Store
 */.DS_Store
+**.dll
 
 src/*/.vs/*
 
