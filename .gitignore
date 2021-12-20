@@ -2,6 +2,8 @@ bin
 bin.debug
 bin/*
 bin.debug/*
+bin/*.dll
+bin.debug/*.dll
 src/TheInternecineStrife/TheInternecineStrife.Codex/bin
 src/TheInternecineStrife/TheInternecineStrife.Codex/obj
 src/TheInternecineStrife/TheInternecineStrife.Online/bin
