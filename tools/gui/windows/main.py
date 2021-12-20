@@ -11,6 +11,9 @@ import threading
 from feodal import feods, constants, tools, Map
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog, simpledialog
+from gui.windows.meta import MetaWindow
+from gui.windows.domain import DomainInfoWindow
+from gui.windows.entities import EntityListWindow
 import gui.dialogs as dialogs
 import gui.resources as res
 import gui.controls as ctrls
@@ -37,49 +40,15 @@ class MainWindow(tk.Tk):
         """ Initial user interface """
         tk.Tk.__init__(self)
         self.withdraw()
-        splash = dialogs.Splash(caption=res.str_resources[21], comment=res.str_resources[22], parent=self)
-        self.root_folder = rootFolder
-        self.root_path = rootFolder if basic is None else basic
-        # "New" map constanted path
-        self.clear = os.path.join(self.root_path, "data", "basis")
-        self.cache = os.path.dirname(self.root_folder)
-
-        splash.message.set(res.str_resources[20])
-        self.name = mapBox.meta['Title']
-        if self.name is None:
-            fname = tkSimpleDialog.askstring(title=res.str_resources[0], prompt=res.str_resources[1])
-            if to_open:
-                mapBox = Map.Map(self.loadMap(fname))
-                self.name = mapBox.meta['Title']
-            elif to_open is None:
-                raise Exception(res.str_resources[2])
         # Window
-        self.edition = mapBox.meta.get('Edition', None)
-        if self.edition is None:
-            original = os.path.join(self.root_path, "data", "assets", "maps", self.name + ".feods")
-            if not os.path.exists(original):
-                original = os.path.join(self.root_path, "data", "assets", "maps", "random", self.name + ".feods")
-            self.edition = time.ctime(os.path.getmtime(original))
-        self.title(res.str_resources[3].format(self.name, self.edition))
-        # Gets the requested values of the height and widht.
-        windowWidth = (self.VISUAL_FACE + 12)*self.ZOOM
-        windowHeight = (self.VISUAL_FACE + 1)*self.ZOOM
-
-        # Gets both half the screen width/height and window width/height
-        positionRight = int(self.winfo_screenwidth()/2 - windowWidth/2)
-        positionDown = int(self.winfo_screenheight()/2 - windowHeight/2)
-
-        self.geometry("{}x{}+{}+{}".format(windowWidth, windowHeight, positionRight, positionDown))
-        self.source = mapBox
-        self.toolkit = tools.Tools(mapBox.face, [mapBox.landscapes[land] for land in mapBox.landscapes])
-        self.pallettes = pallettes
-        self.field = MainWindow.VISUAL_FACE * MainWindow.ZOOM
-        try:
-            self.layers = list(mapBox.layers.keys())
-        except:
-            print(type(mapBox.layers), len(mapBox.layers))
-            raise
-        self.modify = False
+        splash = dialogs.Splash(caption=res.str_resources[21], comment=res.str_resources[22], parent=self)
+        splash.message.set(res.str_resources[20])
+        self.initPaths(rootFolder)
+        self.copyProperties(mapBox=mapBox, pallettes=pallettes)
+        self.setMapEdition(mapBox.meta.get('Edition', None))
+        self.setWindowRect()
+        self.setTitleOfMap(mapBox.meta['Title'], to_open)
+        self.setLayersContainer(mapBox.layers, mapBox.face)
         splash.progress['value'] += 5
         splash.progress.update()
 
@@ -670,3 +639,45 @@ class MainWindow(tk.Tk):
         self.valuer.config(from_=bottom, to=top)
         self.valueControl.config(from_=bottom, to=top)
         self.spinnable.set(self.source.layers[self.layers[self.layer]][self.currentCell])
+
+    # Substages of __init__()
+    def initPaths(self, rootFolder):
+        self.root_folder = rootFolder
+        self.root_path = rootFolder if basic is None else basic
+        # "New" map constanted path
+        self.clear = os.path.join(self.root_path, "data", "basis")
+        self.cache = os.path.dirname(self.root_folder)
+    def setMapEdition(self, edition):
+        original = os.path.join(self.root_path, "data", "assets", "maps", self.name + ".feods")
+        if not os.path.exists(original):
+            original = os.path.join(self.root_path, "data", "assets", "maps", "random", self.name + ".feods")
+        self.edition = elf.edition if self.edition is not None else time.ctime(os.path.getmtime(original))
+    def setWindowRect(self)    
+        # Gets the requested values of the height and widht.
+        windowWidth = (self.VISUAL_FACE + 12)*self.ZOOM
+        windowHeight = (self.VISUAL_FACE + 1)*self.ZOOM
+        # Gets both half the screen width/height and window width/height
+        positionRight = int(self.winfo_screenwidth()/2 - windowWidth/2)
+        positionDown = int(self.winfo_screenheight()/2 - windowHeight/2)
+        self.geometry("{}x{}+{}+{}".format(windowWidth, windowHeight, positionRight, positionDown))
+    def setTitleOfMap(self, name, to_open=None):
+        self.name = name
+        if name is None and to_open:
+            fname = tkSimpleDialog.askstring(title=res.str_resources[0], prompt=res.str_resources[1])
+            mapBox = Map.Map(self.loadMap(fname))
+            self.name = name
+        elif name is None:
+            raise Exception(res.str_resources[2])
+        self.title(res.str_resources[3].format(name, self.edition))
+    def setLayersContainer(self, layers, face):
+        try:
+            self.layers = list(layers.keys())
+        except:
+            print(type(layers), len(layers))
+            raise
+        self.toolkit = tools.Tools(face, [landscapes[land] for land in landscapes])
+    def copyProperties(self, mapBox, pallettes):
+        self.source = mapBox
+        self.pallettes = pallettes
+        self.modify = False
+        self.field = MainWindow.VISUAL_FACE * MainWindow.ZOOM
