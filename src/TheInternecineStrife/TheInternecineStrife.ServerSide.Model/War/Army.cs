@@ -12,14 +12,28 @@ namespace TheInternecineStrife.ServerSide.Model.War
 	{
         // Отряды, составляющие армию. Они не могу смешиваться между собой, но могут быть расформированы или покинуть армию в любой момент.
         public Division[] Stacks = new Division[9];
-
-		public int Strength { get; set; }
-		public bool Regular { get; set; }
-		public int NextPayDay { get; set; }
-		
-        public float Energy { get; set; }
-        public SoldierProfile Class { get; set; }
-        public Formation Formation { get; set; }
+        /// <summary>
+        /// Учётная сила армии. Задает уровень зарплаты, военных и продовольственных запасов.
+        /// </summary>
+        public int Strong => Stacks.Sum(regiment => (int)regiment?.Contract.Nominal);
+		public int Strength {
+            get => Stacks.Sum(regiment => (int)regiment?.Strength);
+            set {
+                var dead = Strength - value;
+                if (dead < 0)
+                {
+                    return;
+                }
+                var dice = new Random();
+                var deadInDivision = dice.Next(dead);
+                var i = 0;
+                while (deadInDivision > 0)
+                {
+                    Stacks[i].Strength -= deadInDivision;
+                    i = (i + 1) % Stacks.Length;
+                }
+            }
+        }
 		
 		public Army()
 		{
