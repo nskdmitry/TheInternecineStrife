@@ -5,7 +5,7 @@ namespace TheInternecineStrife.ServerSide.Model.War
 	/// <summary>
 	/// Using at attack for fortess. It destroys walls.
 	/// </summary>
-	public class SiegeMachine
+	public class SiegeMachine : SoldierProfile
 	{
 		public int Count {get; set; }
 		public int Integrity { get; set; }
@@ -13,6 +13,7 @@ namespace TheInternecineStrife.ServerSide.Model.War
 		
 		public SiegeMachine()
 		{
+            Machined = true;
 		}
 	}
 }
