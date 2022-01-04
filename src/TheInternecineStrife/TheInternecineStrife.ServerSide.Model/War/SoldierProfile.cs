@@ -18,14 +18,13 @@ namespace TheInternecineStrife.ServerSide.Model.War
         public Weapon Malee;
         public Weapon Range;
         public bool Machined { protected set; get; }
+        public readonly PriceOf Price;
 
         public const float HAVY_MARSH_SPEED = 4.0f;
         public const float LIGHT_RUN_SPEED = 10.0f;
         public const float CHARIOT_SPEED = 24.0f;
         public const float LIGHT_HORSE_SPEED = 36;
         public const float KNIGHT_HORSE_SPEED = 21;
-        
-        public GoodItem[] Property;
         
         public static List<SoldierProfile> Basic = new List<SoldierProfile>(20);
 
@@ -50,7 +49,7 @@ namespace TheInternecineStrife.ServerSide.Model.War
         {
             energy = Math.Min(1.0f, energy);
             var highBonus = CalcRangeDistanceBonus(heightDifference);
-            return highBonus + (Machined ? energy * (Range.Far - Range.Near) + Range.Near : Range.Far);
+            return highBonus + (!Machined ? (energy * (Range.Far - Range.Near)) + Range.Near : Range.Far);
         }
 
         /// <summary>
