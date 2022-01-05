@@ -21,7 +21,7 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
             }
 
             Withdraw(dayPrice);
-            Clients.Experience += instruments;
+            Clients.Experience += instruments * TRAINING_RESULT;
 
             return 0;
         }
@@ -53,5 +53,7 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
                 Catridges = Clients.Profile.Range != null ? Clients.Strength * Cost.Catridges : 0
             };
         }
+
+        protected const float TRAINING_RESULT = 0.5f;
     }
 }
