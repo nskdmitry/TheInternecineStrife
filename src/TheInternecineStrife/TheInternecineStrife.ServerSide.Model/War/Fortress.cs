@@ -21,7 +21,7 @@ namespace TheInternecineStrife.ServerSide.Model.War
 
         public float Product(int day, float instrument)
         {
-            if (Order is null || !Order.Actual)
+            if ((Order is null || !Order.Actual) && !(Economic is Brothel))
             {
                 return 0;
             }
