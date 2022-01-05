@@ -8,6 +8,8 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
 {
     public class Brothel : Institution
     {
+        public float OwnersShare { get; set; } = 0;
+        public Treasury OwnersTresury { get; protected set; }
         private new float Catridges { get; } = 0;
         private new float WeaponArmor { get; } = 0;
 
@@ -53,7 +55,9 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
             Clients.Energy = Math.Min(1f, Clients.Energy +  (float)(clientsServised/(int)Clients.Contract.Nominal));
             float finalSum = CalcIncomesFrom(clientsServised);
             Clients.Baggage.Gold -= finalSum;
-            Gold += finalSum;
+            var toPayForOwner = Math.Min(finalSum + Workers.Founds, OwnersShare);
+            OwnersTresury.Gold += toPayForOwner;
+            Gold += finalSum - toPayForOwner;
             return finalSum;
         }
 
