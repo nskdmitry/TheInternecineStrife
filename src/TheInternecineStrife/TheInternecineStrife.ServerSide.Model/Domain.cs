@@ -8,6 +8,7 @@ namespace TheInternecineStrife.ServerSide.Model
 {
     public class Domain : Controllable
     {
-        
+        public Dwelling Capital { get; protected set; }
+
     }
 }
