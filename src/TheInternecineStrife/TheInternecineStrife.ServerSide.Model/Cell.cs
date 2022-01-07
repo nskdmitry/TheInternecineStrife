@@ -19,6 +19,17 @@ namespace TheInternecineStrife.ServerSide.Model
         Full =7 // Клетка полностью подконтрольна игроку. Он знает о ней вообще всё!
     };
 
+    public struct Point
+    {
+        public readonly int X;
+        public readonly int Y;
+        public Point(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+    }
+
 	/// <summary>
 	/// Игровая клетка.
 	/// </summary>
@@ -36,7 +47,8 @@ namespace TheInternecineStrife.ServerSide.Model
 		public Army Camp { get; set; }
 		public LandType Background { get; set; }
 		public Dwelling Settling { get; set; }
-        public Economic.Extraction Minigs { get; set; }
+        // Добыча ресурсов: сельское хозяйство, валка леса/добыча минералов, цех/посад.
+        public Economic.OutwallProduction Production { get; private set; }
         public Highlighting Known { get; set; }
 		
 		public int Welfare { 
