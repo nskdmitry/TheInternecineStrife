@@ -10,12 +10,12 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
     {
         public override float Product(float instruments)
         {
-            if (Clients == null || Workers == null || (Clients.Strength > 0) || (Workers.Man > 0))
+            if (!CanWork())
             {
                 return 0;
             }
             var dayPrice = CalcCosts(Workers.Man);
-            if (FeasableIncome(dayPrice))
+            if (FeasableOutcome(dayPrice))
             {
                 return 0;
             }
@@ -33,13 +33,13 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
 
         private static readonly PriceOf Cost = new PriceOf(0.001f, 0.025f, 0.005f, 1, 0.25f, 0);
 
-        protected override bool FeasableIncome(Treasury income)
+        protected override bool FeasableOutcome(Treasury outcome)
         {
-            return Gold < income.Gold ||
-                Food < income.Food ||
-                Fuel < income.Fuel ||
-                WeaponArmor < income.WeaponArmor ||
-                Catridges < income.Catridges;
+            return Gold < outcome.Gold ||
+                Food < outcome.Food ||
+                Fuel < outcome.Fuel ||
+                WeaponArmor < outcome.WeaponArmor ||
+                Catridges < outcome.Catridges;
         }
 
         public override Treasury CalcCosts(int workers)
