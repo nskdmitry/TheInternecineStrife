@@ -74,9 +74,9 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
             return 0;
         }
 
-        protected virtual bool FeasableIncome(Treasury income)
+        protected virtual bool FeasableOutcome(Treasury outcome)
         {
-            return true;
+            return Gold < outcome.Gold;
         }
 
         protected float _food = 0;
