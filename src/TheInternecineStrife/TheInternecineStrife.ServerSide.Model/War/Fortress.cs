@@ -26,6 +26,10 @@ namespace TheInternecineStrife.ServerSide.Model.War
                 return 0;
             }
             var masters = (Economic as Shop);
+            if (masters == null && !(Economic is Brothel))
+            {
+                return 0;
+            }
             if (masters.Need)
             {
                 DefineTender(masters.Food, AllProduction.Food);
