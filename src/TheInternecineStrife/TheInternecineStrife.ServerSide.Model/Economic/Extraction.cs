@@ -11,7 +11,7 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
     /// <summary>
     /// Место добычи ресурсов
     /// </summary>
-    public sealed class Extraction : Treasury
+    public sealed class Extraction : OutwallProduction
     {
         public Resource Material { get => _excavate; set {
                 _excavate = value != Resource.None ? value : _excavate;
@@ -49,7 +49,7 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
         private readonly float FuelOnStart;
         private readonly float SourceOnStart;
 
-        public Extraction(Treasury rich, float profit, int size)
+        public Extraction(Treasury rich, float profit, int size, Cell cell) : base(cell)
         {
             GoldOnStart = rich.Gold;
             FuelOnStart = rich.Fuel;

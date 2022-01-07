@@ -6,7 +6,7 @@ using TheInternecineStrife.ServerSide.Model.Social;
 
 namespace TheInternecineStrife.ServerSide.Model.Economic
 {
-    public sealed class Soils : Treasury
+    public sealed class Soils : OutwallProduction
     {
         public float FullSquer { get; private set; }
         public float WeedSquer { get => weeds; private set => weeds = Math.Min(FullSquer, value); }
@@ -29,8 +29,9 @@ namespace TheInternecineStrife.ServerSide.Model.Economic
         }
         public Stratum Peasants { get; private set; }
 
-        public Soils(float squer, LandType land, Stratum peasants = null)
+        public Soils(float squer, Cell place, Stratum peasants = null) : base(place)
         {
+            Place = place;
             FullSquer = squer;
             WeedSquer = squer;
             if (peasants != null)
